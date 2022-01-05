@@ -1,0 +1,11 @@
+#ignore build tree
+build/
+
+#ignore generated doc files
+doc/
+
+#ignore emcas .dir-locals
+.dir-locals.el
+
+#ignore emacs backup files
+*~
