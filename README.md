@@ -6,6 +6,19 @@
 **PRE-ALPHA WARNING**
 This is an hobby project, still in a very, very early stage of development. Feel free to look around, and provide feedback and/or help if you can, but remember that nothing of this is complete, and that it will likely change.
 
+## Installation
+To build the project, I suggest you to create a different build tree, which on my machine I called `build`. Therefore, you should be fine using:
+```sh
+mkdir build
+cd build
+cmake ..
+make
+```
+Then, the executable file is `build/src/elr1`. It runs reading a grammar file. For testing, an example is the file `prova.gram`. You can try it with (assuming you are in `build/`):
+```sh
+cat ../prova.gram | src/elr1
+```
+
 ## Why? :robot:
 This project was inspired by the Formal languages and compilers course taught at Politecnico di Milano, Italy. I found the ELR(1) parsing method interesting, and I noted the lack of an automated tool that could help us students in practicing. This project is **not affiliated**, or by any mean **related** to the university.
 
@@ -15,7 +28,7 @@ This project is developed using three primary technologies: the C++ language, th
 ## License :bison:
 This project is released under the terms of GNU General Public License, version 3 or any later version. I choose that because I found it to be the most accademic-y license for an educational project. However, I'd like to point out that, in my opinion, technological progress must be paired with technology ethics. In that sense, I agree that "[software shall be used for good, not evil](https://en.wikipedia.org/wiki/Douglas_Crockford#%22Good,_not_Evil%22)". So, I'd like to accept [the ACM Code of Ethics and Professional Conduct](https://www.acm.org/binaries/content/assets/about/acm-code-of-ethics-booklet.pdf).
 
-## Contacts :busts_in_silhouette: :speech_baloon:
+## Contacts :busts_in_silhouette: :speech_balloon:
 
 Feel free to reach me for any question, suggestion, doubt.
 You can find me here on GitHub, or at my student address: alessandro.bertulli@mail.polimi.it .
