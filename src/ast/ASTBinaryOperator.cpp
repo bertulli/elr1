@@ -1,6 +1,3 @@
-#ifndef ASTNODE_H
-#define ASTNODE_H
-
 /*************************************************************************/
 /* Copyright Alessandro Bertulli 2022                                    */
 /* This file is part of ExpLaineR1.					 */
@@ -19,26 +16,23 @@
 /* along with ExpLaineR1. If not, see <https://www.gnu.org/licenses/>.	 */
 /*************************************************************************/
 
-#include "ASTGenericNode.hpp"
+#include "ASTBinaryOperator.hpp"
+#include <iostream>
 
-enum class UnaryOperator{
-  star,
-  cross
-};
+ASTBinaryOperator::ASTBinaryOperator(BinaryOperator op, ASTGenericNode *left,
+                                     ASTGenericNode *right)
+    : ASTInternalNode(), m_op(op), m_left(left), m_right(right) {
+  if(m_op == BinaryOperator::alter)
+    m_opRepr = 'U';
+  else if(m_op == BinaryOperator::concat)
+    m_opRepr = '.';
+}
 
-enum class BinaryOperator{
-  concat,
-  alter
-};
-
-
-class ASTInternalNode: public ASTGenericNode
-{
-public:
-  ASTInternalNode();
-  virtual ~ASTInternalNode();
-  virtual void print();
-};
-
-
-#endif /* ASTNODE_H */
+void ASTBinaryOperator::print(){
+  std::cout << '(' << m_opRepr << ' ';
+  m_left->print();
+  std::cout << ' ';
+  m_right->print();
+  std::cout << ')';
+  return;
+}

@@ -1,6 +1,7 @@
 #ifndef ASTREE_H
 #define ASTREE_H
 
+#include "ASTGenericNode.hpp"
 /*************************************************************************/
 /* Copyright Alessandro Bertulli 2022                                    */
 /* This file is part of ExpLaineR1.					 */
@@ -25,9 +26,11 @@
 class ASTree
 {
 public:
-  ASTree();
+  ASTree(ASTGenericNode* root);
   virtual ~ASTree();
+  void print();
 private:
+  ASTGenericNode* m_root;
 };
 
 

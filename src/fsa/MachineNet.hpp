@@ -20,6 +20,7 @@
 /*************************************************************************/
 
 #include "Machine.hpp"
+#include "../ast/ASTGenericNode.hpp"
 #include <unordered_map>
 #include <string>
 
@@ -30,10 +31,12 @@ public:
   static MachineNet* getInstance();
   virtual ~MachineNet();
   int addMachine(std::string machineName);
+  Machine* getMachine(std::string machineName);
+  Machine* operator[](std::string machineName);
 private:
   MachineNet(MachineNet& other) = delete;
   void operator=(const MachineNet& other) = delete;
-  
+
   MachineNet();
   std::unordered_map<std::string, Machine*> m_machines;
   //static MachineNet* m_net;

@@ -27,6 +27,7 @@ class ASTLeafTerminal :public ASTLeafNode
 public:
   ASTLeafTerminal(Terminal term);
   virtual ~ASTLeafTerminal();
+  void print();
 private:
   Terminal m_term;
 };

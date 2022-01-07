@@ -19,13 +19,22 @@
 
 add_library(astlib
   STATIC #for now
+  ASTBinaryOperator.cpp
   ASTBinaryOperator.hpp
+  ASTGenericNode.hpp
+  ASTGenericNode.cpp
+  AST.hpp
+  ASTInternalNode.cpp
   ASTInternalNode.hpp
+  ASTLeafNode.cpp
   ASTLeafNode.hpp
+  ASTLeafNonTerminal.cpp
   ASTLeafNonTerminal.hpp
+  ASTLeafTerminal.cpp
   ASTLeafTerminal.hpp
-  ASTree.hpp
   ASTree.cpp
+  ASTree.hpp
+  ASTUnaryOperator.cpp
   ASTUnaryOperator.hpp
   )
 

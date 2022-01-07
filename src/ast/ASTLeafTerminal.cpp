@@ -18,6 +18,14 @@
 
 #include "ASTLeafTerminal.hpp"
 #include "../common/Types.hpp"
+#include <iostream>
 
 ASTLeafTerminal::ASTLeafTerminal(Terminal term)
   : m_term{term}{}
+
+ASTLeafTerminal::~ASTLeafTerminal() {}
+
+void ASTLeafTerminal::print(){
+  std::cout << m_term;
+  return;
+}

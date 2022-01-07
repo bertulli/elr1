@@ -17,5 +17,14 @@
 /*************************************************************************/
 
 #include "ASTree.hpp"
+#include "ASTGenericNode.hpp"
 
-ASTree::ASTree(){}
+ASTree::ASTree(ASTGenericNode *root)
+  : m_root(root)    {}
+
+ASTree::~ASTree() { delete m_root; }
+
+void ASTree::print() {
+  m_root->print();
+  return;
+}

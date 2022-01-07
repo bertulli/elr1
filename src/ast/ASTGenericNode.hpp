@@ -1,5 +1,5 @@
-#ifndef ASTNODE_H
-#define ASTNODE_H
+#ifndef ASTGENERICNODE_H
+#define ASTGENERICNODE_H
 
 /*************************************************************************/
 /* Copyright Alessandro Bertulli 2022                                    */
@@ -19,26 +19,13 @@
 /* along with ExpLaineR1. If not, see <https://www.gnu.org/licenses/>.	 */
 /*************************************************************************/
 
-#include "ASTGenericNode.hpp"
-
-enum class UnaryOperator{
-  star,
-  cross
-};
-
-enum class BinaryOperator{
-  concat,
-  alter
-};
-
-
-class ASTInternalNode: public ASTGenericNode
+class ASTGenericNode
 {
 public:
-  ASTInternalNode();
-  virtual ~ASTInternalNode();
+  ASTGenericNode();
+  virtual ~ASTGenericNode();
   virtual void print();
 };
 
 
-#endif /* ASTNODE_H */
+#endif /* ASTGENERICNODE_H */

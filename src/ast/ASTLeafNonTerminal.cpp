@@ -18,6 +18,12 @@
 
 #include "ASTLeafNonTerminal.hpp"
 #include "../common/Types.hpp"
+#include <iostream>
 
 ASTLeafNonTerminal::ASTLeafNonTerminal(NonTerminal nonterm)
   : m_nonterm{nonterm}{}
+
+void ASTLeafNonTerminal::print(){
+  std::cout << m_nonterm;
+  return;
+}

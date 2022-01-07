@@ -18,12 +18,23 @@
 
 #include "Machine.hpp"
 #include "MachineState.hpp"
+#include "../ast/ASTGenericNode.hpp"
+#include "../ast/ASTree.hpp"
 #include <utility>
 #include <iostream>
 
 Machine::Machine(std::string machineName)
   : m_machineName{machineName}
 {};
+
+int Machine::addTree(ASTGenericNode *subtree){
+  m_tree = new ASTree(subtree);
+  return 1;
+}
+
+ASTree *Machine::getTree() {
+  return m_tree;  
+}
 
 bool Machine::addState(std::string stateName, bool finalState, bool initialState){
   MachineState *newStatePtr = new MachineState{stateName, finalState};

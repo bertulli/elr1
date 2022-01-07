@@ -36,9 +36,10 @@ add_library(parserlib STATIC
   ${FLEX_lexer_OUTPUTS}
   )
 
-target_link_libraries(parserlib fsalib)
+target_link_libraries(parserlib fsalib astlib)
 
 target_include_directories(parserlib PUBLIC
   "${PROJECT_BINARY_DIR}/src/parser"
   "${PROJECT_SOURCE_DIR}/src"
+  "${PROJECT_SOURCE_DIR}/src/ast"
 )

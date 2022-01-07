@@ -27,6 +27,7 @@ class ASTLeafNonTerminal :public ASTLeafNode
 public:
   ASTLeafNonTerminal(NonTerminal nonterm);
   virtual ~ASTLeafNonTerminal();
+  void print();
 private:
   NonTerminal m_nonterm;
 };

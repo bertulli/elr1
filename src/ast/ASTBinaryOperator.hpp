@@ -21,15 +21,18 @@
 
 
 #include "ASTInternalNode.hpp"
+#include "ASTGenericNode.hpp"
 
 class ASTBinaryOperator :public ASTInternalNode
 {
 public:
-  ASTBinaryOperator();
+  ASTBinaryOperator(BinaryOperator op, ASTGenericNode* left, ASTGenericNode* right);
+  virtual void print();
 private:
   BinaryOperator m_op;
-  NodeType* m_left;
-  NodeType* m_right;
+  char m_opRepr;
+  ASTGenericNode* m_left;
+  ASTGenericNode* m_right;
 };
 
 

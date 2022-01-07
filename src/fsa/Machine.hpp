@@ -20,6 +20,8 @@
 /*************************************************************************/
 
 #include "MachineState.hpp"
+#include "../ast/ASTGenericNode.hpp"
+#include "../ast/ASTree.hpp"
 #include <unordered_map>
 #include <string>
 
@@ -59,9 +61,15 @@ public:
    * @return     true if successful
    */
   bool registerTransition(std::string sourceState, std::string destState, Terminal label);
+
+  int addTree(ASTGenericNode* subtree);
+
+  ASTree* getTree();
+
   void printDebug();
 private:
   std::unordered_map<std::string, MachineState*> m_states;
+  ASTree* m_tree;
   std::string m_initialState;
   std::string m_machineName;
 };

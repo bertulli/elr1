@@ -19,11 +19,14 @@
 /* along with ExpLaineR1. If not, see <https://www.gnu.org/licenses/>.	 */
 /*************************************************************************/
 
-class ASTLeafNode
+#include "ASTGenericNode.hpp"
+
+class ASTLeafNode : public ASTGenericNode
 {
 public:
   ASTLeafNode();
   virtual ~ASTLeafNode();
+  virtual void print();
 };
 
 

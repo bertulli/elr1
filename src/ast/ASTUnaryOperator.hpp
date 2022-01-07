@@ -24,10 +24,12 @@
 class ASTUnaryOperator :public ASTInternalNode
 {
 public:
-  ASTUnaryOperator();
+  ASTUnaryOperator(UnaryOperator op, ASTGenericNode* child);
+  void print();
 private:
   UnaryOperator m_op;
-  NodeType* m_child;
+  char m_opRepr;
+  ASTGenericNode* m_child;
 };
 
 #endif /* ASTUNARYOPERATOR_H */
