@@ -1,3 +1,6 @@
+#ifndef ASTCROSSOPERATOR_H
+#define ASTCROSSOPERATOR_H
+
 /*************************************************************************/
 /* Copyright Alessandro Bertulli 2022                                    */
 /* This file is part of ExpLaineR1.					 */
@@ -16,31 +19,18 @@
 /* along with ExpLaineR1. If not, see <https://www.gnu.org/licenses/>.	 */
 /*************************************************************************/
 
-#include "fsa/Machine.hpp"
-#include "fsa/MachineNet.hpp"
-#include <ast/AST.hpp>
+#include "ASTUnaryOperator.hpp"
 
-#include <iostream>
-#include <parser.hpp>
-#include <string>
-
-int main(int argc, char *argv[])
+class ASTCrossOperator : public ASTUnaryOperator
 {
+public:
+  ASTCrossOperator(ASTGenericNode* child);
+  virtual ~ASTCrossOperator();
+  bool isNullable() override;
+  std::set<BSGrammarChar> iniSet() override;
+  std::set<BSGrammarChar> finSet() override;
+  std::set<std::pair<BSGrammarChar, BSGrammarChar>> digSet() override;
+};
 
-    yyparse();
-    MachineNet* net = MachineNet::getInstance();
-    Machine* m=net->getMachine("S");
-    ASTree* t=m->getTree();
-    ASTGenericNode* root=t->getRoot();
-    std::string res =root->isNullable() ? "true" : "false" ;
-    std::cout<< res;
-    return 0;
-    
-  // std::cout << "Hi!\n";
-  // Machine simpleRegex{"simpleNameForRegex"};
-  // simpleRegex.addState("q0");
-  // simpleRegex.addState("q1");
-  // simpleRegex.registerTransition("q0", "q1", 'a');
-  // simpleRegex.printDebug();
-  // return 0;
-}
+
+#endif /* ASTCROSSOPERATOR_H */

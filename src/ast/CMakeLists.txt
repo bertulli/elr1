@@ -21,8 +21,12 @@ add_library(astlib
   STATIC #for now
   ASTBinaryOperator.cpp
   ASTBinaryOperator.hpp
-  ASTGenericNode.hpp
+  ASTConcatOperator.cpp
+  ASTConcatOperator.hpp
+  ASTCrossOperator.cpp
+  ASTCrossOperator.hpp
   ASTGenericNode.cpp
+  ASTGenericNode.hpp
   AST.hpp
   ASTInternalNode.cpp
   ASTInternalNode.hpp
@@ -34,8 +38,12 @@ add_library(astlib
   ASTLeafTerminal.hpp
   ASTree.cpp
   ASTree.hpp
+  ASTStarOperator.cpp
+  ASTStarOperator.hpp
   ASTUnaryOperator.cpp
   ASTUnaryOperator.hpp
+  ASTUnionOperator.cpp
+  ASTUnionOperator.hpp
   )
 
 target_include_directories(astlib PUBLIC

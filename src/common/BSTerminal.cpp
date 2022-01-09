@@ -16,31 +16,31 @@
 /* along with ExpLaineR1. If not, see <https://www.gnu.org/licenses/>.	 */
 /*************************************************************************/
 
-#include "fsa/Machine.hpp"
-#include "fsa/MachineNet.hpp"
-#include <ast/AST.hpp>
+#include "BSTerminal.hpp"
+#include "BSGrammarChar.hpp"
 
-#include <iostream>
-#include <parser.hpp>
-#include <string>
+BSTerminal::BSTerminal(char term, int erPos)
+  : BSGrammarChar{term,erPos} {}
 
-int main(int argc, char *argv[])
-{
+BSTerminal::~BSTerminal() {}
 
-    yyparse();
-    MachineNet* net = MachineNet::getInstance();
-    Machine* m=net->getMachine("S");
-    ASTree* t=m->getTree();
-    ASTGenericNode* root=t->getRoot();
-    std::string res =root->isNullable() ? "true" : "false" ;
-    std::cout<< res;
-    return 0;
-    
-  // std::cout << "Hi!\n";
-  // Machine simpleRegex{"simpleNameForRegex"};
-  // simpleRegex.addState("q0");
-  // simpleRegex.addState("q1");
-  // simpleRegex.registerTransition("q0", "q1", 'a');
-  // simpleRegex.printDebug();
-  // return 0;
+bool operator==(const BSTerminal &term1, const BSTerminal &term2) {
+  return term1.m_grammarChar == term2.m_grammarChar &&
+    term1.m_rePos == term2.m_rePos;
+}
+
+std::set<BSTerminal> unionTerminal(std::set<BSTerminal> left,
+                                 std::set<BSTerminal> right) {
+  std::set<BSTerminal> res;
+  for(auto i : left){
+    if(res.count(i)==0){
+      res.emplace(i);
+    }
+  }
+  for (auto i : right) {
+    if(res.count(i)==0){
+      res.emplace(i);
+    }
+  }
+  return res;
 }

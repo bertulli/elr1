@@ -16,15 +16,15 @@
 /* along with ExpLaineR1. If not, see <https://www.gnu.org/licenses/>.	 */
 /*************************************************************************/
 
-#include "ASTBinaryOperator.hpp"
+#include "ASTConcatOperator.hpp"
 #include <iostream>
 
-ASTBinaryOperator::ASTBinaryOperator(ASTGenericNode *left,
-                                     ASTGenericNode *right, BinaryOperator op, char opRepr)
-  : ASTInternalNode(), m_left(left), m_right(right), m_op(op), m_opRepr(opRepr) {}
+ASTConcatOperator::ASTConcatOperator(ASTGenericNode *left, ASTGenericNode *right)
+  : ASTBinaryOperator(left, right, BinaryOperator::concat, '.') {}
 
+ASTConcatOperator::~ASTConcatOperator() {}
 
-void ASTBinaryOperator::print(){
+void ASTConcatOperator::print(){
   std::cout << '(' << m_opRepr << ' ';
   m_left->print();
   std::cout << ' ';
@@ -32,19 +32,41 @@ void ASTBinaryOperator::print(){
   std::cout << ')';
   return;
 }
-bool ASTBinaryOperator::isNullable() { return false; }
 
-std::set<BSGrammarChar> ASTBinaryOperator::iniSet(){
+bool ASTConcatOperator::isNullable() {
+    return m_right->isNullable() && m_left->isNullable();
+}
+
+std::set<BSGrammarChar> ASTConcatOperator::iniSet(){
   std::set<BSGrammarChar> res;
+  if(m_left->isNullable()){
+    res.merge(m_left->iniSet());
+    res.merge(m_right->iniSet());
+  } else {
+    res.merge(m_left->iniSet());
+  }
   return res;
 }
 
-std::set<BSGrammarChar> ASTBinaryOperator::finSet(){
+std::set<BSGrammarChar> ASTConcatOperator::finSet() {
   std::set<BSGrammarChar> res;
+  if(m_right->isNullable()){
+    res.merge(m_left->iniSet());
+    res.merge(m_right->iniSet());
+  } else {
+    res.merge(m_right->iniSet());
+  }
   return res;
 }
 
-std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTBinaryOperator::digSet(){
+std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTConcatOperator::digSet(){
   std::set<std::pair<BSGrammarChar, BSGrammarChar>> res;
+  res.merge(m_left->digSet());
+  res.merge(m_right->digSet());
+  for(auto left : m_left->finSet()){
+    for(auto right : m_right->finSet()){
+      res.insert(std::pair<BSGrammarChar, BSGrammarChar>(left, right));
+    }
+  }
   return res;
 }

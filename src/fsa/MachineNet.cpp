@@ -30,10 +30,13 @@ MachineNet* MachineNet::getInstance(){
   return &m_net;
 }
 
-Machine *MachineNet::operator[](std::string machineName) {
+Machine* MachineNet::operator[](std::string machineName) {
   return m_machines[machineName];
 }
 
+Machine* MachineNet::getMachine(std::string machineName) {
+  return m_machines[machineName];
+}
 int MachineNet::addMachine(std::string machineName){
   m_machines[machineName] = new Machine(machineName);
   return 1;

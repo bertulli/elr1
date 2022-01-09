@@ -21,17 +21,19 @@
 
 #include <string>
 #include <unordered_map>
-#include "../common/Types.hpp"
+#include "../common/BSTerminal.hpp"
+
+
 
 class MachineState{
 public:
   MachineState(std::string name, bool finalState);
-  bool addTransition(Terminal term, std::string dest);
-  std::unordered_map<Terminal, std::string>& getTransitions();
+  bool addTransition(BSTerminal term, std::string dest);
+  std::unordered_map<BSTerminal, std::string, BSTerminal_hash>* getTransitions();
   bool isFinal();
 private:
   std::string m_name;
-  std::unordered_map<Terminal, std::string> m_transitions;
+  std::unordered_map<BSTerminal, std::string, BSTerminal_hash>* m_transitions;
   bool m_final;
 };
 

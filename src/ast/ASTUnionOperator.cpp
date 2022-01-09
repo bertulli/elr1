@@ -16,31 +16,44 @@
 /* along with ExpLaineR1. If not, see <https://www.gnu.org/licenses/>.	 */
 /*************************************************************************/
 
-#include "fsa/Machine.hpp"
-#include "fsa/MachineNet.hpp"
-#include <ast/AST.hpp>
-
+#include "ASTUnionOperator.hpp"
 #include <iostream>
-#include <parser.hpp>
-#include <string>
 
-int main(int argc, char *argv[])
-{
+ASTUnionOperator::ASTUnionOperator(ASTGenericNode *left, ASTGenericNode *right)
+  : ASTBinaryOperator(left, right, BinaryOperator::alter, 'U') {}
 
-    yyparse();
-    MachineNet* net = MachineNet::getInstance();
-    Machine* m=net->getMachine("S");
-    ASTree* t=m->getTree();
-    ASTGenericNode* root=t->getRoot();
-    std::string res =root->isNullable() ? "true" : "false" ;
-    std::cout<< res;
-    return 0;
-    
-  // std::cout << "Hi!\n";
-  // Machine simpleRegex{"simpleNameForRegex"};
-  // simpleRegex.addState("q0");
-  // simpleRegex.addState("q1");
-  // simpleRegex.registerTransition("q0", "q1", 'a');
-  // simpleRegex.printDebug();
-  // return 0;
+ASTUnionOperator::~ASTUnionOperator() {}
+
+void ASTUnionOperator::print(){
+  std::cout << '(' << m_opRepr << ' ';
+  m_left->print();
+  std::cout << ' ';
+  m_right->print();
+  std::cout << ')';
+  return;
+}
+
+bool ASTUnionOperator::isNullable() {
+    return m_right->isNullable() || m_left->isNullable();
+}
+
+std::set<BSGrammarChar> ASTUnionOperator::iniSet(){
+  std::set<BSGrammarChar> res;
+  res.merge(m_right->iniSet());
+  res.merge(m_left->iniSet());
+  return res;
+}
+
+std::set<BSGrammarChar> ASTUnionOperator::finSet() {
+  std::set<BSGrammarChar> res;
+  res.merge(m_right->iniSet());
+  res.merge(m_left->iniSet());
+  return res;
+}
+
+std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTUnionOperator::digSet(){
+  std::set<std::pair<BSGrammarChar, BSGrammarChar>> res;
+  res.merge(m_left->digSet());
+  res.merge(m_right->digSet());
+  return res;
 }

@@ -1,3 +1,6 @@
+#ifndef TERMINAL_H
+#define TERMINAL_H
+
 /*************************************************************************/
 /* Copyright Alessandro Bertulli 2022                                    */
 /* This file is part of ExpLaineR1.					 */
@@ -16,31 +19,28 @@
 /* along with ExpLaineR1. If not, see <https://www.gnu.org/licenses/>.	 */
 /*************************************************************************/
 
-#include "fsa/Machine.hpp"
-#include "fsa/MachineNet.hpp"
-#include <ast/AST.hpp>
+#include <functional>
+#include <set>
+#include "BSGrammarChar.hpp"
 
-#include <iostream>
-#include <parser.hpp>
-#include <string>
-
-int main(int argc, char *argv[])
+struct BSTerminal_hash
 {
+  template <class T1>
+  std::size_t operator () (T1 const &v) const
+  {
+    return std::hash<char>()(v.getGrammarChar());    
+  }
+};
 
-    yyparse();
-    MachineNet* net = MachineNet::getInstance();
-    Machine* m=net->getMachine("S");
-    ASTree* t=m->getTree();
-    ASTGenericNode* root=t->getRoot();
-    std::string res =root->isNullable() ? "true" : "false" ;
-    std::cout<< res;
-    return 0;
-    
-  // std::cout << "Hi!\n";
-  // Machine simpleRegex{"simpleNameForRegex"};
-  // simpleRegex.addState("q0");
-  // simpleRegex.addState("q1");
-  // simpleRegex.registerTransition("q0", "q1", 'a');
-  // simpleRegex.printDebug();
-  // return 0;
-}
+class BSTerminal : public BSGrammarChar
+{
+  // add Cents + Cents using a friend function
+  friend bool operator==(const BSTerminal &term1, const BSTerminal &term2);
+public:
+  BSTerminal(char term, int erPos);
+  virtual ~BSTerminal();
+};
+
+std::set<BSTerminal> unionTerminal(std::set<BSTerminal> left, std::set<BSTerminal> right);
+
+#endif /* TERMINAL_H */

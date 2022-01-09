@@ -1,7 +1,6 @@
 #ifndef ASTREE_H
 #define ASTREE_H
 
-#include "ASTGenericNode.hpp"
 /*************************************************************************/
 /* Copyright Alessandro Bertulli 2022                                    */
 /* This file is part of ExpLaineR1.					 */
@@ -20,6 +19,7 @@
 /* along with ExpLaineR1. If not, see <https://www.gnu.org/licenses/>.	 */
 /*************************************************************************/
 
+#include "ASTGenericNode.hpp"
 #include <iostream>
 
 
@@ -29,6 +29,7 @@ public:
   ASTree(ASTGenericNode* root);
   virtual ~ASTree();
   void print();
+  ASTGenericNode* getRoot();
 private:
   ASTGenericNode* m_root;
 };

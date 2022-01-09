@@ -24,9 +24,12 @@
 class ASTLeafNode : public ASTGenericNode
 {
 public:
-  ASTLeafNode();
+  ASTLeafNode(char grammarChar, int rePos);
   virtual ~ASTLeafNode();
   virtual void print();
+protected:
+  char m_grammarChar;
+  int m_rePos;
 };
 
 

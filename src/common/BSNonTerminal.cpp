@@ -16,31 +16,25 @@
 /* along with ExpLaineR1. If not, see <https://www.gnu.org/licenses/>.	 */
 /*************************************************************************/
 
-#include "fsa/Machine.hpp"
-#include "fsa/MachineNet.hpp"
-#include <ast/AST.hpp>
+#include "BSNonTerminal.hpp"
 
-#include <iostream>
-#include <parser.hpp>
-#include <string>
+BSNonTerminal::BSNonTerminal(char nonTerm, int rePos)
+  : BSGrammarChar{nonTerm, rePos} {}
 
-int main(int argc, char *argv[])
-{
+BSNonTerminal::~BSNonTerminal(){}
 
-    yyparse();
-    MachineNet* net = MachineNet::getInstance();
-    Machine* m=net->getMachine("S");
-    ASTree* t=m->getTree();
-    ASTGenericNode* root=t->getRoot();
-    std::string res =root->isNullable() ? "true" : "false" ;
-    std::cout<< res;
-    return 0;
-    
-  // std::cout << "Hi!\n";
-  // Machine simpleRegex{"simpleNameForRegex"};
-  // simpleRegex.addState("q0");
-  // simpleRegex.addState("q1");
-  // simpleRegex.registerTransition("q0", "q1", 'a');
-  // simpleRegex.printDebug();
-  // return 0;
+std::set<BSNonTerminal> unionNonTerminal(std::set<BSNonTerminal> left,
+                                       std::set<BSNonTerminal> right) {
+  std::set<BSNonTerminal> res;
+  for(auto i : left){
+    if(res.count(i)==0){
+      res.emplace(i);
+    }
+  }
+  for (auto i : right) {
+    if(res.count(i)==0){
+      res.emplace(i);
+    }
+  }
+  return res;  
 }

@@ -20,7 +20,7 @@
 add_subdirectory(fsa)
 add_subdirectory(ast)
 add_subdirectory(parser)
-#add_subdirectory(src/common)
+add_subdirectory(common)
 #to create a library
 
 #include_directories(${CMAKE_CURRENT_BINARY_DIR})
@@ -30,7 +30,7 @@ add_subdirectory(parser)
 add_executable(elr1 main.cpp)
 
 #set(CMAKE_CXX_STANDARD 11)
-set_target_properties(elr1 PROPERTIES CXX_STANDARD 11)
+#set_target_properties(elr1 PROPERTIES CXX_STANDARD 17)
 
 
 target_include_directories(elr1 PUBLIC
@@ -46,4 +46,5 @@ target_link_libraries(elr1 #target in which link
   fsalib #library name
   astlib
   parserlib
+  commonlib
   )

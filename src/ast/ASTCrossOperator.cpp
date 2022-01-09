@@ -16,31 +16,27 @@
 /* along with ExpLaineR1. If not, see <https://www.gnu.org/licenses/>.	 */
 /*************************************************************************/
 
-#include "fsa/Machine.hpp"
-#include "fsa/MachineNet.hpp"
-#include <ast/AST.hpp>
+#include "ASTCrossOperator.hpp"
+#include "ASTInternalNode.hpp"
 
-#include <iostream>
-#include <parser.hpp>
-#include <string>
+ASTCrossOperator::ASTCrossOperator(ASTGenericNode *child)
+    : ASTUnaryOperator(child, UnaryOperator::cross, '+') {}
 
-int main(int argc, char *argv[])
-{
+ASTCrossOperator::~ASTCrossOperator() {}
 
-    yyparse();
-    MachineNet* net = MachineNet::getInstance();
-    Machine* m=net->getMachine("S");
-    ASTree* t=m->getTree();
-    ASTGenericNode* root=t->getRoot();
-    std::string res =root->isNullable() ? "true" : "false" ;
-    std::cout<< res;
-    return 0;
-    
-  // std::cout << "Hi!\n";
-  // Machine simpleRegex{"simpleNameForRegex"};
-  // simpleRegex.addState("q0");
-  // simpleRegex.addState("q1");
-  // simpleRegex.registerTransition("q0", "q1", 'a');
-  // simpleRegex.printDebug();
-  // return 0;
+bool ASTCrossOperator::isNullable() { return m_child->isNullable(); }
+
+std::set<BSGrammarChar> ASTCrossOperator::iniSet() { return m_child->iniSet(); }
+
+std::set<BSGrammarChar> ASTCrossOperator::finSet() { return m_child->finSet(); }
+
+std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTCrossOperator::digSet(){
+  std::set<std::pair<BSGrammarChar, BSGrammarChar>> res;
+  res.merge(m_child->digSet());
+  for(auto left : m_child->finSet()){
+    for(auto right : m_child->iniSet()){
+      res.insert(std::pair<BSGrammarChar, BSGrammarChar>(left, right));
+    }
+  }
+  return res;
 }

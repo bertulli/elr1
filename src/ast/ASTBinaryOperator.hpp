@@ -1,3 +1,4 @@
+
 #ifndef ASTBINARYOPERATOR_H
 #define ASTBINARYOPERATOR_H
 
@@ -26,9 +27,13 @@
 class ASTBinaryOperator :public ASTInternalNode
 {
 public:
-  ASTBinaryOperator(BinaryOperator op, ASTGenericNode* left, ASTGenericNode* right);
-  virtual void print();
-private:
+  ASTBinaryOperator(ASTGenericNode* left, ASTGenericNode* right, BinaryOperator op, char opRepr);
+  virtual void print() override;
+  bool isNullable() override;
+  std::set<BSGrammarChar> iniSet() override;
+  std::set<BSGrammarChar> finSet() override;
+  std::set<std::pair<BSGrammarChar, BSGrammarChar>> digSet() override;
+protected:
   BinaryOperator m_op;
   char m_opRepr;
   ASTGenericNode* m_left;
