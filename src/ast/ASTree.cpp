@@ -24,6 +24,10 @@ ASTree::ASTree(ASTGenericNode *root)
 
 ASTree::~ASTree() { delete m_root; }
 
+ASTGenericNode *ASTree::getRoot() {
+  return m_root;
+}
+
 void ASTree::print() {
   m_root->print();
   return;

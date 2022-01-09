@@ -17,15 +17,33 @@
 /*************************************************************************/
 
 #include "ASTLeafTerminal.hpp"
-#include "../common/Types.hpp"
 #include <iostream>
+#include <set>
 
-ASTLeafTerminal::ASTLeafTerminal(Terminal term)
-  : m_term{term}{}
+bool ASTLeafTerminal::isNullable() { return false; }
+
+std::set<BSGrammarChar> ASTLeafTerminal::iniSet() {
+  std::set<BSGrammarChar> res = {BSTerminal{m_grammarChar, m_rePos}};
+  return res;
+}
+
+std::set<BSGrammarChar> ASTLeafTerminal::finSet() {
+  BSTerminal leaf{m_grammarChar, m_rePos};
+  std::set<BSGrammarChar> res = {leaf};
+  return res;
+}
+
+std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTLeafTerminal::digSet(){
+  std::set<std::pair<BSGrammarChar, BSGrammarChar>> emptyRes;
+  return emptyRes;
+}
+
+ASTLeafTerminal::ASTLeafTerminal(char grammarChar, int rePos)
+    : ASTLeafNode{grammarChar, rePos} {}
 
 ASTLeafTerminal::~ASTLeafTerminal() {}
 
 void ASTLeafTerminal::print(){
-  std::cout << m_term;
+  std::cout << m_grammarChar<<m_rePos;
   return;
 }

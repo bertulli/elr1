@@ -20,6 +20,7 @@
 #include "MachineState.hpp"
 #include "../ast/ASTGenericNode.hpp"
 #include "../ast/ASTree.hpp"
+#include "../common/BSGrammarChar.hpp"
 #include <utility>
 #include <iostream>
 
@@ -46,7 +47,7 @@ bool Machine::addState(std::string stateName, bool finalState, bool initialState
   return true;
 }
 
-bool Machine::registerTransition(std::string sourceState, std::string destState, Terminal label){
+bool Machine::registerTransition(std::string sourceState, std::string destState, BSTerminal label){
   m_states[sourceState]->addTransition(label, destState);
   return true;
 }
@@ -56,9 +57,9 @@ void Machine::printDebug(){
 	    << "States of the machine:\n";
   for(const auto& state_i : m_states){
     std::cout << state_i.first << ":\n";
-    std::unordered_map<Terminal, std::string>& state_iTrans = state_i.second->getTransitions();
+    std::unordered_map<BSTerminal, std::string, BSTerminal_hash>& state_iTrans = (*state_i.second->getTransitions());
     for (const auto& trans_i : state_iTrans) {
-      std::cout << "\t" << trans_i.first << " -> " << trans_i.second << "\n";
+      std::cout << "\t" << trans_i.first.getGrammarChar() << " -> " << trans_i.second << "\n";
     	}
       }
   return;

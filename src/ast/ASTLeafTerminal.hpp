@@ -20,16 +20,18 @@
 /*************************************************************************/
 
 #include "ASTLeafNode.hpp"
-#include "../common/Types.hpp"
+#include "../common/BSTerminal.hpp"
 
 class ASTLeafTerminal :public ASTLeafNode
 {
 public:
-  ASTLeafTerminal(Terminal term);
+  ASTLeafTerminal(char grammarChar, int rePos);
   virtual ~ASTLeafTerminal();
-  void print();
-private:
-  Terminal m_term;
+  void print() override;
+  bool isNullable() override;
+  std::set<BSGrammarChar> iniSet() override;
+  std::set<BSGrammarChar> finSet() override;
+  std::set<std::pair<BSGrammarChar, BSGrammarChar>> digSet() override;
 };
 
 

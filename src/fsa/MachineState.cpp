@@ -21,13 +21,15 @@
 #include <utility>
 
 MachineState::MachineState(std::string name, bool finalState)
-  : m_name{name}, m_final{finalState}{}
+    : m_name{name}, m_final{finalState} {
+  m_transitions = new std::unordered_map<BSTerminal, std::string, BSTerminal_hash>;
+}
 
-bool MachineState::addTransition(Terminal term, std::string dest){
-  m_transitions.insert(std::make_pair(term, dest));
+bool MachineState::addTransition(BSTerminal term, std::string dest){
+  m_transitions->insert(std::make_pair(term, dest));
   return true;
 }
 
-std::unordered_map<Terminal, std::string>& MachineState::getTransitions(){
+std::unordered_map<BSTerminal, std::string, BSTerminal_hash>* MachineState::getTransitions(){
   return m_transitions;
 }

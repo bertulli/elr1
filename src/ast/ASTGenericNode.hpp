@@ -19,12 +19,20 @@
 /* along with ExpLaineR1. If not, see <https://www.gnu.org/licenses/>.	 */
 /*************************************************************************/
 
+#include <set>
+#include <string>
+#include "../common/BSTerminal.hpp"
+
 class ASTGenericNode
 {
 public:
   ASTGenericNode();
   virtual ~ASTGenericNode();
   virtual void print();
+  virtual bool isNullable()=0;
+  virtual std::set<BSGrammarChar> iniSet()=0;
+  virtual std::set<BSGrammarChar> finSet()=0;
+  virtual std::set<std::pair<BSGrammarChar, BSGrammarChar>> digSet()=0;
 };
 
 

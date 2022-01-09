@@ -18,6 +18,7 @@
 
 %{
 #include <parser.hpp>
+int reCurrentPos = 0;
 %}
 
 PRODSIGN                    ":"|"::="|"=>"
@@ -25,9 +26,15 @@ PRODSIGN                    ":"|"::="|"=>"
 %option noyywrap
 			
 %%
-[a-z]                       {yylval.term = yytext[0]; return TERMINAL;}
-[A-Z]                       {yylval.nterm = yytext[0]; return NONTERMINAL;}
-{PRODSIGN}                  {return PRODSIGN;}
+[a-z]                       {yylval.bsChar.grammarChar = yytext[0];
+                             yylval.bsChar.rePos = reCurrentPos;
+                             reCurrentPos++; return TERMINAL;}
+
+[A-Z]                       {yylval.bsChar.grammarChar = yytext[0];
+                             yylval.bsChar.rePos = reCurrentPos;
+                             reCurrentPos++; return NONTERMINAL;}
+
+{PRODSIGN}                  {reCurrentPos = 0; return PRODSIGN;}
 "|"                         {return UNION;}
 "*"                         {return STAR;}
 "+"                         {return CROSS;}

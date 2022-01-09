@@ -20,16 +20,19 @@
 /*************************************************************************/
 
 #include "ASTLeafNode.hpp"
-#include "../common/Types.hpp"
+#include "../common/BSNonTerminal.hpp"
+#include "../common/BSTerminal.hpp"
 
 class ASTLeafNonTerminal :public ASTLeafNode
 {
 public:
-  ASTLeafNonTerminal(NonTerminal nonterm);
+  ASTLeafNonTerminal(char grammarChar, int rePos);
   virtual ~ASTLeafNonTerminal();
-  void print();
-private:
-  NonTerminal m_nonterm;
+  void print() override;
+  bool isNullable() override;
+  std::set<BSGrammarChar> iniSet() override;
+  std::set<BSGrammarChar> finSet() override;
+  std::set<std::pair<BSGrammarChar, BSGrammarChar>> digSet() override;
 };
 
 

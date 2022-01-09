@@ -18,7 +18,8 @@
 
 %{
 #include <stdio.h>
-#include <common/Types.hpp>
+#include <common/BSTerminal.hpp>
+#include <common/BSNonTerminal.hpp>
 #include <fsa/MachineNet.hpp>
 #include <string.h>
 #include <ast/AST.hpp>
@@ -42,15 +43,18 @@ char* pcross(char* subexp);
 	char* pexpr;
 	ASTGenericNode* subtree;
     };
+    struct BSCharacter{
+	char grammarChar;
+	int rePos;
+	};
 }
 %union{
-    char term;
-    char nterm;
+    struct BSCharacter bsChar;
     struct expression expr;
 }
 			
-%precedence	<term>		TERMINAL
-%token	<nterm>		NONTERMINAL
+%precedence	<bsChar>		TERMINAL
+%token	<bsChar>		NONTERMINAL
 %type	<expr>		expr
 %token PRODSIGN
 %start grammar			
@@ -67,46 +71,47 @@ grammar : grammar rule {}
 	|	rule
 ;
 
-rule : NONTERMINAL {std::string machineName{std::string(1,$1)};
+rule : NONTERMINAL {std::string machineName{std::string(1, $1.grammarChar)};
                     MachineNet::getInstance()->addMachine(machineName);}
 
 PRODSIGN expr {printf("Rule for %c: %s\n", $1, $4.pexpr);
-               (*MachineNet::getInstance())[std::string(1,$1)]->addTree($4.subtree);
+               (*MachineNet::getInstance())[std::string(1,$1.grammarChar)]->addTree($4.subtree);
                std::cout << '\n';
                std::cout << "Print tree:\n";
-               (*MachineNet::getInstance())[std::string(1,$1)]->getTree()->print();
+               (*MachineNet::getInstance())[std::string(1,$1.grammarChar)]->getTree()->print();
                std::cout << '\n';
                }
 ;
 
 expr : TERMINAL {$$.pexpr = (char*) malloc(sizeof(char) * 2);
-                 $$.pexpr[0] = $1;
+                 $$.pexpr[0] = $1.grammarChar;
                  $$.pexpr[1] = '\0';
 
+
                  // create leaf node
-                 $$.subtree = new ASTLeafTerminal($1);
+                 $$.subtree = new ASTLeafTerminal($1.grammarChar, $1.rePos);
                  }
 
 | 	expr UNION expr {$$.pexpr = punion($1.pexpr, $3.pexpr);
                          //create union node
-                         $$.subtree = new ASTBinaryOperator(BinaryOperator::alter, $1.subtree, $3.subtree);
+                         $$.subtree = new ASTUnionOperator($1.subtree, $3.subtree);
                          }
 
 |	expr CONCAT expr {$$.pexpr = pconcat($1.pexpr, $3.pexpr);
                           //create concat node
-                          $$.subtree = new ASTBinaryOperator(BinaryOperator::concat, $1.subtree, $3.subtree);
+                          $$.subtree = new ASTConcatOperator($1.subtree, $3.subtree);
                           }
 |	expr STAR {$$.pexpr = pstar($1.pexpr);
                    //create star node
-                   $$.subtree = new ASTUnaryOperator(UnaryOperator::star, $1.subtree);
+                   $$.subtree = new ASTStarOperator($1.subtree);
                    }
 |	expr CROSS {$$.pexpr = pcross($1.pexpr);
                     //create cross node
-                    $$.subtree = new ASTUnaryOperator(UnaryOperator::cross, $1.subtree);
+                    $$.subtree = new ASTCrossOperator($1.subtree);
                     }
 |	expr expr %prec CONCAT {$$.pexpr = pconcat($1.pexpr, $2.pexpr);
                                 //create concat node
-                                $$.subtree = new ASTBinaryOperator(BinaryOperator::concat, $1.subtree, $2.subtree);
+                                $$.subtree = new ASTConcatOperator($1.subtree, $2.subtree);
                                 }
 |	LPAR expr RPAR %prec NEST {$$.pexpr = $2.pexpr;
                                    //link the subtree

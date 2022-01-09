@@ -1,5 +1,5 @@
-#ifndef TERMINAL_H
-#define TERMINAL_H
+#ifndef NONTERMINAL_H
+#define NONTERMINAL_H
 
 /*************************************************************************/
 /* Copyright Alessandro Bertulli 2022                                    */
@@ -19,7 +19,16 @@
 /* along with ExpLaineR1. If not, see <https://www.gnu.org/licenses/>.	 */
 /*************************************************************************/
 
-typedef char Terminal;
-typedef char NonTerminal;
+#include <set>
+#include "BSGrammarChar.hpp"
 
-#endif /* TERMINAL_H */
+class BSNonTerminal : public BSGrammarChar
+{
+public:
+  BSNonTerminal(char nonTerm, int rePos);
+  virtual ~BSNonTerminal();
+};
+
+std::set<BSNonTerminal> unionNonTerminal(std::set<BSNonTerminal> left, std::set<BSNonTerminal> right);
+
+#endif /* NONTERMINAL_H */

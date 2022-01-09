@@ -19,13 +19,8 @@
 #include "ASTUnaryOperator.hpp"
 #include <iostream>
 
-ASTUnaryOperator::ASTUnaryOperator(UnaryOperator op, ASTGenericNode *child)
-    : m_op(op), m_child(child) {
-  if(m_op == UnaryOperator::cross)
-    m_opRepr = '+';
-  else if(m_op == UnaryOperator::star)
-    m_opRepr = '*';
-}
+ASTUnaryOperator::ASTUnaryOperator(ASTGenericNode *child, UnaryOperator op, char opRepr)
+  : m_child(child), m_op(op), m_opRepr(opRepr) {}
 
 void ASTUnaryOperator::print(){
   std::cout << '(' << m_opRepr << ' ';

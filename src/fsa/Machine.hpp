@@ -60,7 +60,7 @@ public:
    *
    * @return     true if successful
    */
-  bool registerTransition(std::string sourceState, std::string destState, Terminal label);
+  bool registerTransition(std::string sourceState, std::string destState, BSTerminal label);
 
   int addTree(ASTGenericNode* subtree);
 
