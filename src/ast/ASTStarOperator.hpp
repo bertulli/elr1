@@ -27,9 +27,9 @@ class ASTStarOperator : public ASTUnaryOperator
 public:
   ASTStarOperator(ASTGenericNode* child);
   virtual ~ASTStarOperator();
-  bool isNullable() override;
-  std::set<BSGrammarChar> iniSet() override;
-  std::set<BSGrammarChar> finSet() override;
+  bool isBSNullable() override;
+  std::set<BSGrammarChar> iniBSSet() override;
+  std::set<BSGrammarChar> finBSSet() override;
   std::set<std::pair<BSGrammarChar, BSGrammarChar>> digSet() override;
 };
 

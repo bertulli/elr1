@@ -33,28 +33,28 @@ void ASTConcatOperator::print(){
   return;
 }
 
-bool ASTConcatOperator::isNullable() {
-    return m_right->isNullable() && m_left->isNullable();
+bool ASTConcatOperator::isBSNullable() {
+    return m_right->isBSNullable() && m_left->isBSNullable();
 }
 
-std::set<BSGrammarChar> ASTConcatOperator::iniSet(){
+std::set<BSGrammarChar> ASTConcatOperator::iniBSSet(){
   std::set<BSGrammarChar> res;
-  if(m_left->isNullable()){
-    res.merge(m_left->iniSet());
-    res.merge(m_right->iniSet());
+  if(m_left->isBSNullable()){
+    res.merge(m_left->iniBSSet());
+    res.merge(m_right->iniBSSet());
   } else {
-    res.merge(m_left->iniSet());
+    res.merge(m_left->iniBSSet());
   }
   return res;
 }
 
-std::set<BSGrammarChar> ASTConcatOperator::finSet() {
+std::set<BSGrammarChar> ASTConcatOperator::finBSSet() {
   std::set<BSGrammarChar> res;
-  if(m_right->isNullable()){
-    res.merge(m_left->iniSet());
-    res.merge(m_right->iniSet());
+  if(m_right->isBSNullable()){
+    res.merge(m_left->iniBSSet());
+    res.merge(m_right->iniBSSet());
   } else {
-    res.merge(m_right->iniSet());
+    res.merge(m_right->iniBSSet());
   }
   return res;
 }
@@ -63,8 +63,8 @@ std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTConcatOperator::digSet(){
   std::set<std::pair<BSGrammarChar, BSGrammarChar>> res;
   res.merge(m_left->digSet());
   res.merge(m_right->digSet());
-  for(auto left : m_left->finSet()){
-    for(auto right : m_right->finSet()){
+  for(auto left : m_left->finBSSet()){
+    for(auto right : m_right->finBSSet()){
       res.insert(std::pair<BSGrammarChar, BSGrammarChar>(left, right));
     }
   }

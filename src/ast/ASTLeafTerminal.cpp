@@ -20,14 +20,16 @@
 #include <iostream>
 #include <set>
 
-bool ASTLeafTerminal::isNullable() { return false; }
+bool ASTLeafTerminal::isBSNullable() {
+     return false;
+ }
 
-std::set<BSGrammarChar> ASTLeafTerminal::iniSet() {
+std::set<BSGrammarChar> ASTLeafTerminal::iniBSSet() {
   std::set<BSGrammarChar> res = {BSTerminal{m_grammarChar, m_rePos}};
   return res;
 }
 
-std::set<BSGrammarChar> ASTLeafTerminal::finSet() {
+std::set<BSGrammarChar> ASTLeafTerminal::finBSSet() {
   BSTerminal leaf{m_grammarChar, m_rePos};
   std::set<BSGrammarChar> res = {leaf};
   return res;

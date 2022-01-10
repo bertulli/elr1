@@ -76,7 +76,9 @@ rule : NONTERMINAL {std::string machineName{std::string(1, $1.grammarChar)};
                     MachineNet::getInstance()->addMachine(machineName);}
 
 PRODSIGN expr {printf("Rule for %c: %s\n", $1, $4.pexpr);
-               (*MachineNet::getInstance())[std::string(1,$1.grammarChar)]->addTree($4.subtree);
+               ASTLeafTerminal* terminalNode = new ASTLeafTerminal('$', 0);
+               ASTGenericNode* terminatedRoot = new ASTConcatOperator($4.subtree, terminalNode);
+               (*MachineNet::getInstance())[std::string(1,$1.grammarChar)]->addTree(terminatedRoot);
                std::cout << '\n';
                std::cout << "Print tree:\n";
                (*MachineNet::getInstance())[std::string(1,$1.grammarChar)]->getTree()->print();

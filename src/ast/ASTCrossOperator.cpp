@@ -24,17 +24,17 @@ ASTCrossOperator::ASTCrossOperator(ASTGenericNode *child)
 
 ASTCrossOperator::~ASTCrossOperator() {}
 
-bool ASTCrossOperator::isNullable() { return m_child->isNullable(); }
+bool ASTCrossOperator::isBSNullable() { return m_child->isBSNullable(); }
 
-std::set<BSGrammarChar> ASTCrossOperator::iniSet() { return m_child->iniSet(); }
+std::set<BSGrammarChar> ASTCrossOperator::iniBSSet() { return m_child->iniBSSet(); }
 
-std::set<BSGrammarChar> ASTCrossOperator::finSet() { return m_child->finSet(); }
+std::set<BSGrammarChar> ASTCrossOperator::finBSSet() { return m_child->finBSSet(); }
 
 std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTCrossOperator::digSet(){
   std::set<std::pair<BSGrammarChar, BSGrammarChar>> res;
   res.merge(m_child->digSet());
-  for(auto left : m_child->finSet()){
-    for(auto right : m_child->iniSet()){
+  for(auto left : m_child->finBSSet()){
+    for(auto right : m_child->iniBSSet()){
       res.insert(std::pair<BSGrammarChar, BSGrammarChar>(left, right));
     }
   }

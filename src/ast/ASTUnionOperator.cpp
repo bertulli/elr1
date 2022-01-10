@@ -33,21 +33,21 @@ void ASTUnionOperator::print(){
   return;
 }
 
-bool ASTUnionOperator::isNullable() {
-    return m_right->isNullable() || m_left->isNullable();
+bool ASTUnionOperator::isBSNullable() {
+    return m_right->isBSNullable() || m_left->isBSNullable();
 }
 
-std::set<BSGrammarChar> ASTUnionOperator::iniSet(){
+std::set<BSGrammarChar> ASTUnionOperator::iniBSSet(){
   std::set<BSGrammarChar> res;
-  res.merge(m_right->iniSet());
-  res.merge(m_left->iniSet());
+  res.merge(m_right->iniBSSet());
+  res.merge(m_left->iniBSSet());
   return res;
 }
 
-std::set<BSGrammarChar> ASTUnionOperator::finSet() {
+std::set<BSGrammarChar> ASTUnionOperator::finBSSet() {
   std::set<BSGrammarChar> res;
-  res.merge(m_right->iniSet());
-  res.merge(m_left->iniSet());
+  res.merge(m_right->iniBSSet());
+  res.merge(m_left->iniBSSet());
   return res;
 }
 

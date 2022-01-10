@@ -29,16 +29,16 @@ void ASTLeafNonTerminal::print(){
   return;
 }
 
-bool ASTLeafNonTerminal::isNullable() {
-  return MachineNet::getInstance()->getMachine(std::string(1,m_grammarChar))->getTree()->getRoot()->isNullable();
+bool ASTLeafNonTerminal::isBSNullable() {
+  return MachineNet::getInstance()->getMachine(std::string(1,m_grammarChar))->getTree()->getRoot()->isBSNullable();
 }
 
-std::set<BSGrammarChar> ASTLeafNonTerminal::iniSet() {
-  return MachineNet::getInstance()->getMachine(std::string(1,m_grammarChar))->getTree()->getRoot()->iniSet();
+std::set<BSGrammarChar> ASTLeafNonTerminal::iniBSSet() {
+  return MachineNet::getInstance()->getMachine(std::string(1,m_grammarChar))->getTree()->getRoot()->iniBSSet();
 }
 
-std::set<BSGrammarChar> ASTLeafNonTerminal::finSet() {
-  return MachineNet::getInstance()->getMachine(std::string(1,m_grammarChar))->getTree()->getRoot()->finSet();
+std::set<BSGrammarChar> ASTLeafNonTerminal::finBSSet() {
+  return MachineNet::getInstance()->getMachine(std::string(1,m_grammarChar))->getTree()->getRoot()->finBSSet();
 }
 
 std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTLeafNonTerminal::digSet(){

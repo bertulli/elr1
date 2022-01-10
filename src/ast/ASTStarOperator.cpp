@@ -26,17 +26,17 @@ ASTStarOperator::ASTStarOperator(ASTGenericNode *child)
 
 ASTStarOperator::~ASTStarOperator() {}
 
-bool ASTStarOperator::isNullable() { return true; }
+bool ASTStarOperator::isBSNullable() { return true; }
 
-std::set<BSGrammarChar> ASTStarOperator::iniSet() { return m_child->iniSet(); }
+std::set<BSGrammarChar> ASTStarOperator::iniBSSet() { return m_child->iniBSSet(); }
 
-std::set<BSGrammarChar> ASTStarOperator::finSet() { return m_child->finSet(); }
+std::set<BSGrammarChar> ASTStarOperator::finBSSet() { return m_child->finBSSet(); }
 
 std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTStarOperator::digSet() {
   std::set<std::pair<BSGrammarChar, BSGrammarChar>> res;
   res.merge(m_child->digSet());
-  for(auto left : m_child->finSet()){
-    for(auto right : m_child->iniSet()){
+  for(auto left : m_child->finBSSet()){
+    for(auto right : m_child->iniBSSet()){
       res.insert(std::pair<BSGrammarChar, BSGrammarChar>(left, right));
     }
   }

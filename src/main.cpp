@@ -24,16 +24,22 @@
 #include <parser.hpp>
 #include <string>
 
+
 int main(int argc, char *argv[])
 {
-
     yyparse();
     MachineNet* net = MachineNet::getInstance();
     Machine* m=net->getMachine("S");
     ASTree* t=m->getTree();
     ASTGenericNode* root=t->getRoot();
-    std::string res =root->isNullable() ? "true" : "false" ;
-    std::cout<< res;
+    std::string res =root->isBSNullable() ? "true" : "false" ;
+    std::cout<< "should be false (check grammar):\n" << res <<"\n";
+
+    std::cout << "Chech for finBSSet:\n";
+    for(auto i : root->finBSSet()){
+      std::cout << i.getGrammarChar() << "\n";
+    }
+    
     std::cout << "Check per i punti e vrgola\n";
     for(auto m : net->getMachines()){
       std::cout << m.first << "\n";

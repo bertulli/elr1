@@ -32,14 +32,14 @@ void ASTBinaryOperator::print(){
   std::cout << ')';
   return;
 }
-bool ASTBinaryOperator::isNullable() { return false; }
+bool ASTBinaryOperator::isBSNullable() { return false; }
 
-std::set<BSGrammarChar> ASTBinaryOperator::iniSet(){
+std::set<BSGrammarChar> ASTBinaryOperator::iniBSSet(){
   std::set<BSGrammarChar> res;
   return res;
 }
 
-std::set<BSGrammarChar> ASTBinaryOperator::finSet(){
+std::set<BSGrammarChar> ASTBinaryOperator::finBSSet(){
   std::set<BSGrammarChar> res;
   return res;
 }
