@@ -42,6 +42,10 @@ int MachineNet::addMachine(std::string machineName){
   return 1;
 }
 
+std::unordered_map<std::string, Machine*> MachineNet::getMachines(){
+  return m_machines;
+}
+
 MachineNet::~MachineNet(){}
 
 

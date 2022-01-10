@@ -41,6 +41,7 @@ PRODSIGN                    ":"|"::="|"=>"
 "."                         {return CONCAT;}
 "("                         {return LPAR;}
 ")"                         {return RPAR;}
+";"                         {return SEMICOLON;}
 [ \n\t\r]                   { /*do nothing*/ }
 .                           { /*do nothing*/ }
 

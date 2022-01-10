@@ -33,6 +33,7 @@ public:
   int addMachine(std::string machineName);
   Machine* getMachine(std::string machineName);
   Machine* operator[](std::string machineName);
+  std::unordered_map<std::string, Machine*> getMachines();
 private:
   MachineNet(MachineNet& other) = delete;
   void operator=(const MachineNet& other) = delete;

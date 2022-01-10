@@ -57,6 +57,7 @@ char* pcross(char* subexp);
 %token	<bsChar>		NONTERMINAL
 %type	<expr>		expr
 %token PRODSIGN
+%token SEMICOLON			
 %start grammar			
 
 %precedence LPAR RPAR
@@ -67,7 +68,7 @@ char* pcross(char* subexp);
 			
 %%
 
-grammar : grammar rule {}
+grammar : grammar SEMICOLON rule {}
 	|	rule
 ;
 
@@ -81,6 +82,7 @@ PRODSIGN expr {printf("Rule for %c: %s\n", $1, $4.pexpr);
                (*MachineNet::getInstance())[std::string(1,$1.grammarChar)]->getTree()->print();
                std::cout << '\n';
                }
+	|	/*empty*/
 ;
 
 expr : TERMINAL {$$.pexpr = (char*) malloc(sizeof(char) * 2);

@@ -34,6 +34,10 @@ int main(int argc, char *argv[])
     ASTGenericNode* root=t->getRoot();
     std::string res =root->isNullable() ? "true" : "false" ;
     std::cout<< res;
+    std::cout << "Check per i punti e vrgola\n";
+    for(auto m : net->getMachines()){
+      std::cout << m.first << "\n";
+    }
     return 0;
     
   // std::cout << "Hi!\n";
