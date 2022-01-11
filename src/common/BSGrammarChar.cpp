@@ -25,6 +25,23 @@ operator<<(std::ostream &stream,
   return stream;
 }
 
+bool operator==(const BSGrammarChar first, const BSGrammarChar second) {
+  return first.m_grammarChar == second.m_grammarChar &&
+    first.m_rePos == second.m_rePos;
+}
+
+std::set<BSGrammarChar> BSGrammarChar::folBSSet(
+    const std::set<std::pair<BSGrammarChar, BSGrammarChar>> digBSSet,
+    BSGrammarChar keyGrammChar) {
+  std::set<BSGrammarChar> res;
+  for(auto i : digBSSet){
+    if(i.first == keyGrammChar){
+      res.emplace(i.second);
+    }
+  }
+  return res;
+}
+
 std::set<BSGrammarChar> unionGrammarChar(std::set<BSGrammarChar> left, std::set<BSGrammarChar> right) {
   std::set<BSGrammarChar> res;
   for(auto i : left){

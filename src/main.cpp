@@ -57,8 +57,18 @@ int main(int argc, char *argv[])
     for(auto i : root->finBSSet()){
       std::cout << i << ' ';
     }
+    auto digSet = root->digBSSet();
     std::cout <<"\nDig set (should not contain <b2, b2> nor <a4, $0>):\n";
-    for(auto i : root->digBSSet()){
+    for(auto i : digSet){
+      std::cout << i << ' ';
+    }
+
+    std::cout <<"\nFollowers of b2:\n";
+    for(auto i : BSGrammarChar::folBSSet(digSet, BSGrammarChar('b',2))){
+      std::cout << i << ' ';
+    }
+    std::cout <<"\nFollowers of b3:\n";
+    for(auto i : BSGrammarChar::folBSSet(digSet, BSGrammarChar('b',3))){
       std::cout << i << ' ';
     }
     std::cout<<std::endl;
