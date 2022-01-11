@@ -34,7 +34,7 @@ PRODSIGN                    ":"|"::="|"=>"
                              yylval.bsChar.rePos = reCurrentPos;
                              reCurrentPos++; return NONTERMINAL;}
 
-{PRODSIGN}                  {reCurrentPos = 0; return PRODSIGN;}
+{PRODSIGN}                  {reCurrentPos = 1; return PRODSIGN;}
 "|"                         {return UNION;}
 "*"                         {return STAR;}
 "+"                         {return CROSS;}
