@@ -26,7 +26,7 @@ class ASTLeafNode : public ASTGenericNode
 public:
   ASTLeafNode(char grammarChar, int rePos);
   virtual ~ASTLeafNode();
-  virtual void print();
+  void print() override;
 protected:
   char m_grammarChar;
   int m_rePos;

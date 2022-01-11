@@ -26,7 +26,6 @@ class ASTUnionOperator : public ASTBinaryOperator
 public:
   ASTUnionOperator(ASTGenericNode* left, ASTGenericNode* right);
   virtual ~ASTUnionOperator();
-  virtual void print() override;
   bool isBSNullable() override;
   std::set<BSGrammarChar> iniBSSet() override;
   std::set<BSGrammarChar> finBSSet() override;

@@ -28,11 +28,7 @@ class ASTBinaryOperator :public ASTInternalNode
 {
 public:
   ASTBinaryOperator(ASTGenericNode* left, ASTGenericNode* right, BinaryOperator op, char opRepr);
-  virtual void print() override;
-  bool isBSNullable() override;
-  std::set<BSGrammarChar> iniBSSet() override;
-  std::set<BSGrammarChar> finBSSet() override;
-  std::set<std::pair<BSGrammarChar, BSGrammarChar>> digSet() override;
+  void print() override;
 protected:
   BinaryOperator m_op;
   char m_opRepr;

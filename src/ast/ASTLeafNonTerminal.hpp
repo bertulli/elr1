@@ -28,7 +28,6 @@ class ASTLeafNonTerminal :public ASTLeafNode
 public:
   ASTLeafNonTerminal(char grammarChar, int rePos);
   virtual ~ASTLeafNonTerminal();
-  void print() override;
   bool isBSNullable() override;
   std::set<BSGrammarChar> iniBSSet() override;
   std::set<BSGrammarChar> finBSSet() override;

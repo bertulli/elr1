@@ -32,19 +32,3 @@ void ASTBinaryOperator::print(){
   std::cout << ')';
   return;
 }
-bool ASTBinaryOperator::isBSNullable() { return false; }
-
-std::set<BSGrammarChar> ASTBinaryOperator::iniBSSet(){
-  std::set<BSGrammarChar> res;
-  return res;
-}
-
-std::set<BSGrammarChar> ASTBinaryOperator::finBSSet(){
-  std::set<BSGrammarChar> res;
-  return res;
-}
-
-std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTBinaryOperator::digSet(){
-  std::set<std::pair<BSGrammarChar, BSGrammarChar>> res;
-  return res;
-}

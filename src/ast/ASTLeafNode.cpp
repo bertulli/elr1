@@ -17,10 +17,14 @@
 /*************************************************************************/
 
 #include "ASTLeafNode.hpp"
+#include <iostream>
 
 ASTLeafNode::ASTLeafNode(char grammarChar, int rePos)
   : m_grammarChar{grammarChar}, m_rePos{rePos} {}
 
 ASTLeafNode::~ASTLeafNode() {}
 
-void ASTLeafNode::print(){}
+void ASTLeafNode::print() {
+  std::cout << m_grammarChar<<m_rePos;
+  return;  
+}

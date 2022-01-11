@@ -37,7 +37,6 @@ class ASTInternalNode: public ASTGenericNode
 public:
   ASTInternalNode();
   virtual ~ASTInternalNode();
-  virtual void print();
 };
 
 

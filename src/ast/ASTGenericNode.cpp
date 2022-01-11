@@ -24,4 +24,4 @@ ASTGenericNode::ASTGenericNode(){}
 ASTGenericNode::~ASTGenericNode() {}
 
 
-void ASTGenericNode::print(){}
+//void ASTGenericNode::print(){}

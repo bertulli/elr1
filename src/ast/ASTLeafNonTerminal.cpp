@@ -24,11 +24,6 @@
 ASTLeafNonTerminal::ASTLeafNonTerminal(char grammarChar, int rePos)
   : ASTLeafNode{grammarChar, rePos}{}
 
-void ASTLeafNonTerminal::print(){
-  std::cout << m_grammarChar <<m_rePos;
-  return;
-}
-
 bool ASTLeafNonTerminal::isBSNullable() {
   return MachineNet::getInstance()->getMachine(std::string(1,m_grammarChar))->getTree()->getRoot()->isBSNullable();
 }

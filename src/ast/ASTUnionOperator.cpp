@@ -24,15 +24,6 @@ ASTUnionOperator::ASTUnionOperator(ASTGenericNode *left, ASTGenericNode *right)
 
 ASTUnionOperator::~ASTUnionOperator() {}
 
-void ASTUnionOperator::print(){
-  std::cout << '(' << m_opRepr << ' ';
-  m_left->print();
-  std::cout << ' ';
-  m_right->print();
-  std::cout << ')';
-  return;
-}
-
 bool ASTUnionOperator::isBSNullable() {
     return m_right->isBSNullable() || m_left->isBSNullable();
 }

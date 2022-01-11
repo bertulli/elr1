@@ -44,8 +44,3 @@ ASTLeafTerminal::ASTLeafTerminal(char grammarChar, int rePos)
     : ASTLeafNode{grammarChar, rePos} {}
 
 ASTLeafTerminal::~ASTLeafTerminal() {}
-
-void ASTLeafTerminal::print(){
-  std::cout << m_grammarChar<<m_rePos;
-  return;
-}

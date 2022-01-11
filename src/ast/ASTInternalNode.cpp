@@ -22,4 +22,4 @@ ASTInternalNode::ASTInternalNode()
   : ASTGenericNode()    {}
 ASTInternalNode::~ASTInternalNode(){}
 
-void ASTInternalNode::print(){}
+//void ASTInternalNode::print(){}

@@ -25,7 +25,7 @@ class ASTUnaryOperator :public ASTInternalNode
 {
 public:
   ASTUnaryOperator(ASTGenericNode* child, UnaryOperator op, char opRepr);
-  void print();
+  void print()override;
 protected:
   UnaryOperator m_op;
   char m_opRepr;

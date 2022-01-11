@@ -28,7 +28,7 @@ class ASTGenericNode
 public:
   ASTGenericNode();
   virtual ~ASTGenericNode();
-  virtual void print();
+  virtual void print()=0;
   virtual bool isBSNullable()=0;
   virtual std::set<BSGrammarChar> iniBSSet()=0;
   virtual std::set<BSGrammarChar> finBSSet()=0;

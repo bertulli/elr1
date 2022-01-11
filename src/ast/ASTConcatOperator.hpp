@@ -29,7 +29,6 @@ class ASTConcatOperator : public ASTBinaryOperator
 public:
   ASTConcatOperator(ASTGenericNode* left, ASTGenericNode* right);
   virtual ~ASTConcatOperator();
-  virtual void print() override;
   bool isBSNullable() override;
   std::set<BSGrammarChar> iniBSSet() override;
   std::set<BSGrammarChar> finBSSet() override;

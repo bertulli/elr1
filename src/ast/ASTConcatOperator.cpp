@@ -24,15 +24,6 @@ ASTConcatOperator::ASTConcatOperator(ASTGenericNode *left, ASTGenericNode *right
 
 ASTConcatOperator::~ASTConcatOperator() {}
 
-void ASTConcatOperator::print(){
-  std::cout << '(' << m_opRepr << ' ';
-  m_left->print();
-  std::cout << ' ';
-  m_right->print();
-  std::cout << ')';
-  return;
-}
-
 bool ASTConcatOperator::isBSNullable() {
     return m_right->isBSNullable() && m_left->isBSNullable();
 }

@@ -62,6 +62,8 @@ public:
    */
   bool registerTransition(std::string sourceState, std::string destState, BSTerminal label);
 
+  //bool generateBSMachine();
+
   int addTree(ASTGenericNode* subtree);
 
   ASTree* getTree();
