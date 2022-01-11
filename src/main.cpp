@@ -44,6 +44,24 @@ int main(int argc, char *argv[])
     for(auto m : net->getMachines()){
       std::cout << m.first << "\n";
     }
+
+    m=net->getMachine("A");
+    t=m->getTree();
+    root=t->getRoot();
+
+    std::cout << "Ini set:\n";
+    for(auto i : root->iniBSSet()){
+      std::cout << i << ' ';
+    }
+    std::cout << "\nFin set:\n";
+    for(auto i : root->finBSSet()){
+      std::cout << i << ' ';
+    }
+    std::cout <<"\nDig set (should not contain <b2, b2> nor <a4, $0>):\n";
+    for(auto i : root->digBSSet()){
+      std::cout << i << ' ';
+    }
+    std::cout<<std::endl;
     return 0;
     
   // std::cout << "Hi!\n";

@@ -32,7 +32,7 @@ public:
   virtual bool isBSNullable()=0;
   virtual std::set<BSGrammarChar> iniBSSet()=0;
   virtual std::set<BSGrammarChar> finBSSet()=0;
-  virtual std::set<std::pair<BSGrammarChar, BSGrammarChar>> digSet()=0;
+  virtual std::set<std::pair<BSGrammarChar, BSGrammarChar>> digBSSet()=0;
 };
 
 

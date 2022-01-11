@@ -30,9 +30,9 @@ std::set<BSGrammarChar> ASTCrossOperator::iniBSSet() { return m_child->iniBSSet(
 
 std::set<BSGrammarChar> ASTCrossOperator::finBSSet() { return m_child->finBSSet(); }
 
-std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTCrossOperator::digSet(){
+std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTCrossOperator::digBSSet(){
   std::set<std::pair<BSGrammarChar, BSGrammarChar>> res;
-  res.merge(m_child->digSet());
+  res.merge(m_child->digBSSet());
   for(auto left : m_child->finBSSet()){
     for(auto right : m_child->iniBSSet()){
       res.insert(std::pair<BSGrammarChar, BSGrammarChar>(left, right));

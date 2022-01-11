@@ -31,13 +31,19 @@ bool ASTLeafNonTerminal::isBSNullable() {
 }
 
 std::set<BSGrammarChar> ASTLeafNonTerminal::iniBSSet() {
-  return MachineNet::getInstance()->getMachine(std::string(1,m_grammarChar))->getTree()->getRoot()->iniBSSet();
+  std::set<BSGrammarChar> res = {BSTerminal{m_grammarChar, m_rePos}};
+  return res;
+  //return MachineNet::getInstance()->getMachine(std::string(1,m_grammarChar))->getTree()->getRoot()->iniBSSet();
 }
 
 std::set<BSGrammarChar> ASTLeafNonTerminal::finBSSet() {
-  return MachineNet::getInstance()->getMachine(std::string(1,m_grammarChar))->getTree()->getRoot()->finBSSet();
+  std::set<BSGrammarChar> res = {BSTerminal{m_grammarChar, m_rePos}};
+  return res;
+  //return MachineNet::getInstance()->getMachine(std::string(1,m_grammarChar))->getTree()->getRoot()->finBSSet();
 }
 
-std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTLeafNonTerminal::digSet(){
-  return MachineNet::getInstance()->getMachine(std::string(1,m_grammarChar))->getTree()->getRoot()->digSet();
+std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTLeafNonTerminal::digBSSet(){
+  std::set<std::pair<BSGrammarChar, BSGrammarChar>> emptySet;
+  return emptySet;
+  //return MachineNet::getInstance()->getMachine(std::string(1,m_grammarChar))->getTree()->getRoot()->digBSSet();
 }

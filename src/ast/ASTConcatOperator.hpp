@@ -32,7 +32,7 @@ public:
   bool isBSNullable() override;
   std::set<BSGrammarChar> iniBSSet() override;
   std::set<BSGrammarChar> finBSSet() override;
-  std::set<std::pair<BSGrammarChar, BSGrammarChar>> digSet() override;
+  std::set<std::pair<BSGrammarChar, BSGrammarChar>> digBSSet() override;
 };
 
 

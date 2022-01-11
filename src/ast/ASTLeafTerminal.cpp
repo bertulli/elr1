@@ -35,7 +35,7 @@ std::set<BSGrammarChar> ASTLeafTerminal::finBSSet() {
   return res;
 }
 
-std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTLeafTerminal::digSet(){
+std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTLeafTerminal::digBSSet(){
   std::set<std::pair<BSGrammarChar, BSGrammarChar>> emptyRes;
   return emptyRes;
 }

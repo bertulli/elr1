@@ -42,20 +42,20 @@ std::set<BSGrammarChar> ASTConcatOperator::iniBSSet(){
 std::set<BSGrammarChar> ASTConcatOperator::finBSSet() {
   std::set<BSGrammarChar> res;
   if(m_right->isBSNullable()){
-    res.merge(m_left->iniBSSet());
-    res.merge(m_right->iniBSSet());
+    res.merge(m_left->finBSSet());
+    res.merge(m_right->finBSSet());
   } else {
-    res.merge(m_right->iniBSSet());
+    res.merge(m_right->finBSSet());
   }
   return res;
 }
 
-std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTConcatOperator::digSet(){
+std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTConcatOperator::digBSSet(){
   std::set<std::pair<BSGrammarChar, BSGrammarChar>> res;
-  res.merge(m_left->digSet());
-  res.merge(m_right->digSet());
+  res.merge(m_left->digBSSet());
+  res.merge(m_right->digBSSet());
   for(auto left : m_left->finBSSet()){
-    for(auto right : m_right->finBSSet()){
+    for(auto right : m_right->iniBSSet()){
       res.insert(std::pair<BSGrammarChar, BSGrammarChar>(left, right));
     }
   }

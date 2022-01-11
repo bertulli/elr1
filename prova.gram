@@ -2,7 +2,7 @@ S : a|(cb)+|c*
 ;
 
 
-A ::= a+b+c+
+A ::= (a|bb)*(ac)+
 ;
 
 B ::= abcd

@@ -37,14 +37,14 @@ std::set<BSGrammarChar> ASTUnionOperator::iniBSSet(){
 
 std::set<BSGrammarChar> ASTUnionOperator::finBSSet() {
   std::set<BSGrammarChar> res;
-  res.merge(m_right->iniBSSet());
-  res.merge(m_left->iniBSSet());
+  res.merge(m_right->finBSSet());
+  res.merge(m_left->finBSSet());
   return res;
 }
 
-std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTUnionOperator::digSet(){
+std::set<std::pair<BSGrammarChar, BSGrammarChar>> ASTUnionOperator::digBSSet(){
   std::set<std::pair<BSGrammarChar, BSGrammarChar>> res;
-  res.merge(m_left->digSet());
-  res.merge(m_right->digSet());
+  res.merge(m_left->digBSSet());
+  res.merge(m_right->digBSSet());
   return res;
 }
