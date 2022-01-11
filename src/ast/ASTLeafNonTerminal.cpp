@@ -22,7 +22,9 @@
 #include <string>
 
 ASTLeafNonTerminal::ASTLeafNonTerminal(char grammarChar, int rePos)
-  : ASTLeafNode{grammarChar, rePos}{}
+    : ASTLeafNode{grammarChar, rePos} {}
+
+ASTLeafNonTerminal::~ASTLeafNonTerminal() {}
 
 bool ASTLeafNonTerminal::isBSNullable() {
   return MachineNet::getInstance()->getMachine(std::string(1,m_grammarChar))->getTree()->getRoot()->isBSNullable();

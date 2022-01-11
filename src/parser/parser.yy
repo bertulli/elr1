@@ -53,8 +53,7 @@ char* pcross(char* subexp);
     struct expression expr;
 }
 			
-%precedence	<bsChar>		TERMINAL
-%token	<bsChar>		NONTERMINAL
+
 %type	<expr>		expr
 %token PRODSIGN
 %token SEMICOLON			
@@ -62,10 +61,13 @@ char* pcross(char* subexp);
 
 %precedence LPAR RPAR
 %left			UNION
+%left	<bsChar>		TERMINAL
+%left	<bsChar>		NONTERMINAL			
 %left			CONCAT
 %left			STAR CROSS
 %precedence             NEST
-			
+
+						
 %%
 
 grammar : grammar SEMICOLON rule {}
@@ -94,6 +96,16 @@ expr : TERMINAL {$$.pexpr = (char*) malloc(sizeof(char) * 2);
 
                  // create leaf node
                  $$.subtree = new ASTLeafTerminal($1.grammarChar, $1.rePos);
+                 }
+
+	|	NONTERMINAL {
+                 $$.pexpr = (char*) malloc(sizeof(char) * 2);
+                 $$.pexpr[0] = $1.grammarChar;
+                 $$.pexpr[1] = '\0';
+
+
+                 // create leaf node
+                 $$.subtree = new ASTLeafNonTerminal($1.grammarChar, $1.rePos);
                  }
 
 | 	expr UNION expr {$$.pexpr = punion($1.pexpr, $3.pexpr);
