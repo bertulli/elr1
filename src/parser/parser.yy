@@ -27,6 +27,8 @@
 constexpr char* UNION_FORMAT = " U ";
 constexpr char* CONCAT_FORMAT = " . ";
 
+std::set<char>* ruleAlphabet;
+
 int yylex();
 void yyerror(char*);
 
@@ -42,6 +44,7 @@ char* pcross(char* subexp);
     struct expression{
 	char* pexpr;
 	ASTGenericNode* subtree;
+	
     };
     struct BSCharacter{
 	char grammarChar;
@@ -75,12 +78,15 @@ grammar : grammar SEMICOLON rule {}
 ;
 
 rule : NONTERMINAL {std::string machineName{std::string(1, $1.grammarChar)};
-                    MachineNet::getInstance()->addMachine(machineName);}
+                    MachineNet::getInstance()->addMachine(machineName);
+		    ruleAlphabet = new std::set<char>();}
 
 PRODSIGN expr {printf("Rule for %c: %s\n", $1, $4.pexpr);
                ASTLeafTerminal* terminalNode = new ASTLeafTerminal('$', 0);
                ASTGenericNode* terminatedRoot = new ASTConcatOperator($4.subtree, terminalNode);
+	       ruleAlphabet->emplace('$');
                (*MachineNet::getInstance())[std::string(1,$1.grammarChar)]->addTree(terminatedRoot);
+	       (*MachineNet::getInstance())[std::string(1,$1.grammarChar)]->addAlphabet(ruleAlphabet);
                std::cout << '\n';
                std::cout << "Print tree:\n";
                (*MachineNet::getInstance())[std::string(1,$1.grammarChar)]->getTree()->print();
@@ -92,6 +98,7 @@ PRODSIGN expr {printf("Rule for %c: %s\n", $1, $4.pexpr);
 expr : TERMINAL {$$.pexpr = (char*) malloc(sizeof(char) * 2);
                  $$.pexpr[0] = $1.grammarChar;
                  $$.pexpr[1] = '\0';
+                 ruleAlphabet->emplace($1.grammarChar);
 
 
                  // create leaf node
@@ -102,6 +109,7 @@ expr : TERMINAL {$$.pexpr = (char*) malloc(sizeof(char) * 2);
                  $$.pexpr = (char*) malloc(sizeof(char) * 2);
                  $$.pexpr[0] = $1.grammarChar;
                  $$.pexpr[1] = '\0';
+                 ruleAlphabet->emplace($1.grammarChar);
 
 
                  // create leaf node

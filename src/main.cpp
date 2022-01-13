@@ -33,47 +33,59 @@ int main(int argc, char *argv[])
     ASTree* t=m->getTree();
     ASTGenericNode* root=t->getRoot();
     std::string res =root->isBSNullable() ? "true" : "false" ;
-    std::cout<< "should be false (check grammar):\n" << res <<"\n";
+    //    std::cout<< "should be false (check grammar):\n" << res <<"\n";
 
-    std::cout << "Chech for finBSSet:\n";
-    for(auto i : root->finBSSet()){
-      std::cout << i.getGrammarChar() << "\n";
-    }
+    //    std::cout << "Chech for finBSSet:\n";
+    //    for(auto i : root->finBSSet()){
+    //      std::cout << i.getGrammarChar() << "\n";
+    //    }
     
-    std::cout << "Check per i punti e vrgola\n";
-    for(auto m : net->getMachines()){
-      std::cout << m.first << "\n";
-    }
+    //    std::cout << "Check per i punti e vrgola\n";
+    //    for(auto m : net->getMachines()){
+    //      std::cout << m.first << "\n";
+    //    }
 
     m=net->getMachine("A");
     t=m->getTree();
     root=t->getRoot();
 
-    std::cout << "Ini set:\n";
-    for(auto i : root->iniBSSet()){
-      std::cout << i << ' ';
-    }
-    std::cout << "\nFin set:\n";
-    for(auto i : root->finBSSet()){
-      std::cout << i << ' ';
-    }
+    //    std::cout << "Ini set:\n";
+    //    for(auto i : root->iniBSSet()){
+    //      std::cout << i << ' ';
+    //    }
+    //    std::cout << "\nFin set:\n";
+    //    for(auto i : root->finBSSet()){
+    //      std::cout << i << ' ';
+    //    }
     auto digSet = root->digBSSet();
-    std::cout <<"\nDig set (should not contain <b2, b2> nor <a4, $0>):\n";
-    for(auto i : digSet){
-      std::cout << i << ' ';
-    }
+    //    std::cout <<"\nDig set (should not contain <b2, b2> nor <a4, $0>):\n";
+    //    for(auto i : digSet){
+    //      std::cout << i << ' ';
+    //    }
 
-    std::cout <<"\nFollowers of b2:\n";
-    for(auto i : BSGrammarChar::folBSSet(digSet, BSGrammarChar('b',2))){
-      std::cout << i << ' ';
-    }
-    std::cout <<"\nFollowers of b3:\n";
-    for(auto i : BSGrammarChar::folBSSet(digSet, BSGrammarChar('b',3))){
-      std::cout << i << ' ';
-    }
+    //    std::cout << "\nAlphabet:\n";
+    //    for(auto i : *(m->getAlphabet())){
+    //      std::cout << i << ' ';
+    //    }
+
+    //    std::cout <<"\nFollowers of b2:\n";
+    //    for(auto i : BSGrammarChar::folBSSet(digSet, BSGrammarChar('b',2))){
+    //      std::cout << i << ' ';
+    //    }
+    //    std::cout <<"\nFollowers of b3:\n";
+    //    for(auto i : BSGrammarChar::folBSSet(digSet, BSGrammarChar('b',3))){
+    //      std::cout << i << ' ';
+    //    }
+    //    std::cout <<"\nFollowers of a:\n";
+    //    for(auto i : BSGrammarChar::folBSSet(digSet, 'a')){
+    //      std::cout << i << ' ';
+    //    }
     std::cout<<std::endl;
-    return 0;
     
+    m->BSBuild();
+    m->printDebug();
+    return 0;
+
   // std::cout << "Hi!\n";
   // Machine simpleRegex{"simpleNameForRegex"};
   // simpleRegex.addState("q0");

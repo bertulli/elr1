@@ -25,6 +25,14 @@ operator<<(std::ostream &stream,
   return stream;
 }
 
+std::ostream &operator<<(std::ostream &stream, std::set<BSGrammarChar> set) {
+  for(auto i : set){
+    stream << i << ' ';
+  }
+  std::cout << "\n";
+  return stream;
+}
+
 bool operator==(const BSGrammarChar first, const BSGrammarChar second) {
   return first.m_grammarChar == second.m_grammarChar &&
     first.m_rePos == second.m_rePos;
@@ -38,6 +46,38 @@ std::set<BSGrammarChar> BSGrammarChar::folBSSet(
     if(i.first == keyGrammChar){
       res.emplace(i.second);
     }
+  }
+  return res;
+}
+
+std::set<BSGrammarChar>
+BSGrammarChar::folBSSet(std::set<std::pair<BSGrammarChar, BSGrammarChar>> digBSSet,
+         const char keyChar) {
+  std::set<BSGrammarChar> res;
+  for(auto i : digBSSet){
+    if(i.first.m_grammarChar == keyChar){
+      res.emplace(i.second);
+    }
+  }
+  return res;
+}
+
+std::set<BSGrammarChar>
+BSGrammarChar::genQPrime(std::set<std::pair<BSGrammarChar, BSGrammarChar>> digBSSet,
+         std::set<BSGrammarChar> stateSet, const char keyChar) {
+  std::set<BSGrammarChar> res;
+  std::cout << "Generating q':\n";
+  
+  for(auto b_i : stateSet){
+
+    if(b_i.m_grammarChar == keyChar){
+      std::cout << "    For BSGC " << b_i << ":\n        ";
+      for(auto temp : BSGrammarChar::folBSSet(digBSSet, b_i)){
+	std::cout << temp << ' ';
+	res.emplace(temp);
+      }
+    }
+    std::cout << "\n";
   }
   return res;
 }

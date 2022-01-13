@@ -45,6 +45,7 @@ add_library(astlib
   ASTUnionOperator.cpp
   ASTUnionOperator.hpp
   )
+target_link_libraries(astlib commonlib)
 
 target_include_directories(astlib PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}

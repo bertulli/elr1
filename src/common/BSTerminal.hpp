@@ -23,14 +23,14 @@
 #include <set>
 #include "BSGrammarChar.hpp"
 
-struct BSTerminal_hash
-{
-  template <class T1>
-  std::size_t operator () (T1 const &v) const
-  {
-    return std::hash<char>()(v.getGrammarChar());    
-  }
-};
+// struct BSTerminal_hash
+// {
+//   template <class T1>
+//   std::size_t operator () (T1 const &v) const
+//   {
+//     return std::hash<char>()(v.getGrammarChar());    
+//   }
+// };
 
 class BSTerminal : public BSGrammarChar
 {

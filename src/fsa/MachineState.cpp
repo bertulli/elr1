@@ -21,15 +21,33 @@
 #include <utility>
 
 MachineState::MachineState(std::string name, bool finalState)
-    : m_name{name}, m_final{finalState} {
-  m_transitions = new std::unordered_map<BSTerminal, std::string, BSTerminal_hash>;
+  : m_name{name}, m_final{finalState}, m_BSMarked{false} {
+  m_transitions = new std::unordered_map<char, std::string>;
 }
 
-bool MachineState::addTransition(BSTerminal term, std::string dest){
-  m_transitions->insert(std::make_pair(term, dest));
+MachineState::MachineState(std::set<BSGrammarChar> BSState, std::string name)
+    : m_BSState{BSState}, m_BSMarked{false}, m_name{name} {
+  m_transitions = new std::unordered_map<char, std::string>;
+  for(auto b_i : m_BSState){
+    m_stateAlphabet.emplace(b_i.getGrammarChar());
+  }
+}
+
+void MachineState::mark() { m_BSMarked = true; }
+
+bool MachineState::addTransition(char grammarChar, std::string dest){
+  m_transitions->emplace(std::make_pair(grammarChar, dest));
   return true;
 }
 
-std::unordered_map<BSTerminal, std::string, BSTerminal_hash>* MachineState::getTransitions(){
+std::unordered_map<char, std::string>* MachineState::getTransitions(){
   return m_transitions;
 }
+
+std::string MachineState::getName(){ return m_name; }
+
+std::set<BSGrammarChar> MachineState::getBSState() { return m_BSState; }
+
+std::set<char> MachineState::getStateAlphabet() { return m_stateAlphabet; }
+
+bool MachineState::isMarked(){ return m_BSMarked; }

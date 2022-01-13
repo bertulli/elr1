@@ -28,13 +28,22 @@
 class MachineState{
 public:
   MachineState(std::string name, bool finalState);
-  bool addTransition(BSTerminal term, std::string dest);
-  std::unordered_map<BSTerminal, std::string, BSTerminal_hash>* getTransitions();
+  MachineState(std::set<BSGrammarChar> BSState, std::string name = "");
+  bool addTransition(char grammarChar, std::string dest);
+  std::unordered_map<char, std::string>* getTransitions();
+  std::string getName();
+  std::set<BSGrammarChar> getBSState();
+  std::set<char> getStateAlphabet();
   bool isFinal();
+  bool isMarked();
+  void mark();
 private:
   std::string m_name;
-  std::unordered_map<BSTerminal, std::string, BSTerminal_hash>* m_transitions;
+  std::unordered_map<char, std::string>* m_transitions;
+  std::set<BSGrammarChar> m_BSState;
+  std::set<char> m_stateAlphabet;
   bool m_final;
+  bool m_BSMarked;
 };
 
 #endif /* MACHINESTATE_H */

@@ -47,7 +47,9 @@ public:
    *
    * @return     true if successful
    */
-  bool addState(std::string stateName, bool finalState = false, bool initialState = false);
+  bool addState(std::set<BSGrammarChar> BSSet, std::string stateName = "", bool finalState = false, bool initialState = false);
+
+  bool addState(MachineState* statePtr);
 
   /**
    * @brief      add a transition to the Machine
@@ -60,18 +62,25 @@ public:
    *
    * @return     true if successful
    */
-  bool registerTransition(std::string sourceState, std::string destState, BSTerminal label);
+  bool registerTransition(std::string sourceState, std::string destState, char label);
 
   //bool generateBSMachine();
 
   int addTree(ASTGenericNode* subtree);
 
+  bool addAlphabet(std::set<char>* alphabet);
+
   ASTree* getTree();
+
+  std::set<char>* getAlphabet();
+
+  bool BSBuild();
 
   void printDebug();
 private:
   std::unordered_map<std::string, MachineState*> m_states;
   ASTree* m_tree;
+  std::set<char>* m_alphabet;
   std::string m_initialState;
   std::string m_machineName;
 };
