@@ -21,8 +21,13 @@
 #include "../ast/ASTGenericNode.hpp"
 #include "../ast/ASTree.hpp"
 #include "../common/BSGrammarChar.hpp"
+#include <cstdlib>
+#include <vector>
 #include <utility>
 #include <iostream>
+#include <fstream>
+
+constexpr int bufferSize{50};
 
 Machine::Machine(std::string machineName)
   : m_machineName{machineName}
@@ -129,5 +134,40 @@ bool Machine::BSBuild() {
       }
     }
   }
+  return true;
+}
+
+bool Machine::produceDot(std::string fileName) {
+  std::ofstream file{fileName};
+  file << "strict digraph{\n"
+       << "node [shape=circle];\n";
+  for(auto state : m_states){
+    file << state.first << ";\n";
+  }
+  for(auto state : m_states){
+    for(auto transition : *state.second->getTransitions()){
+      file << state.first << " -> " << transition.second << " [label=\" "
+	   << transition.first << " \"];\n";
+    }
+  }
+  file << "}";
+  return true;
+}
+
+bool Machine::compileDot(std::string inputFile, std::string outputFile,
+                         std::string fileType) {
+  char command[bufferSize];
+  std::vector<char> vinputFile(inputFile.c_str(), inputFile.c_str() + inputFile.size() + 1);
+  std::vector<char> voutputFile(outputFile.c_str(), outputFile.c_str() + outputFile.size() + 1);
+  std::vector<char> vfileType(fileType.c_str(), fileType.c_str() + fileType.size() + 1);
+
+  char* cinputFile = vinputFile.data();
+  char* coutputFile = voutputFile.data();
+  char* cfileType = vfileType.data();
+  
+  sprintf(command, "dot -T%s -o %s %s", cfileType, coutputFile, cinputFile);
+  std::cout << "Running " << command << "...\n";
+  system(command);
+  std::cout << "Done\n";
   return true;
 }

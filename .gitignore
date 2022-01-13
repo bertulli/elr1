@@ -4,6 +4,10 @@ build/
 #ignore generated doc files
 doc/
 
+#ignore dot files and pngs
+*.dot
+*.png
+
 #ignore emcas .dir-locals
 .dir-locals.el
 

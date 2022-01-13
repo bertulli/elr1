@@ -76,6 +76,10 @@ public:
 
   bool BSBuild();
 
+  bool produceDot(std::string fileName);
+
+  bool compileDot(std::string inputFile, std::string outputFile, std::string fileType = "png");
+
   void printDebug();
 private:
   std::unordered_map<std::string, MachineState*> m_states;

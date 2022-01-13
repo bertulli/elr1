@@ -84,6 +84,9 @@ int main(int argc, char *argv[])
     
     m->BSBuild();
     m->printDebug();
+    m->produceDot("A.dot");
+    //    system("dot -Tpng -o A.png A.dot");
+    m->compileDot("A.dot", "A.png");
     return 0;
 
   // std::cout << "Hi!\n";
