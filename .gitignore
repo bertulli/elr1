@@ -7,6 +7,7 @@ doc/
 #ignore dot files and pngs
 *.dot
 *.png
+*.jpeg
 
 #ignore emcas .dir-locals
 .dir-locals.el

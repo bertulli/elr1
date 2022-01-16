@@ -21,6 +21,7 @@
 #include "../ast/ASTGenericNode.hpp"
 #include "../ast/ASTree.hpp"
 #include "../common/BSGrammarChar.hpp"
+#include "../common/flags.h"
 #include <cstdlib>
 #include <vector>
 #include <utility>
@@ -64,7 +65,8 @@ bool Machine::addState(MachineState* statePtr) {
 
 bool Machine::registerTransition(std::string sourceState, std::string destState, char label){
   MachineState* sourceMachineState = m_states[sourceState];
-  std::cout << "adding transition " << sourceState << " -" << label << "-> " << destState << "\n";
+  if(explainFsaFlag)
+    std::cout << "adding transition " << sourceState << " -" << label << "-> " << destState << "\n";
   sourceMachineState->addTransition(label, destState);
   return true;
 }
@@ -97,18 +99,21 @@ bool Machine::BSBuild() {
 	finished=false;                  //continue the algorithm at the next iteration
 	q->mark();                       //and mark the state as marked
 
-	std::cout << "\nprocessing and marking state " << q->getName() << ":\n";
-	std::cout << "its stateset is " << q->getBSState() << "\n";
+	if(explainFsaFlag){
+	  std::cout << "\nprocessing and marking state " << q->getName() << ":\n";
+	  std::cout << "its stateset is " << q->getBSState() << "\n";
+	}
 	for(char b : q->getStateAlphabet()){           //for every possible alphabet character
-	  std::cout << "\nCharacter b is " << b << ":\n";
+	  if(explainFsaFlag)
+	    std::cout << "\nCharacter b is " << b << ":\n";
 	  std::set<BSGrammarChar> qprime = BSGrammarChar::genQPrime(digSet, q->getBSState(), b);
 
-	  std::cout << "q' is: " << qprime << "\n";
-	  ///////////////////////////////////////////////////
-
+	  if(explainFsaFlag)
+	    std::cout << "q' is: " << qprime << "\n";
 	  
 	  if(! qprime.empty()){
-	    std::cout << "q' is not empty\n";
+	    if(explainFsaFlag)
+	      std::cout << "q' is not empty\n";
 	    //if(qprime is not in m_states)
 	    bool belongs{false};
 	    std::string destState;
@@ -121,12 +126,14 @@ bool Machine::BSBuild() {
 	    }
 	    std::string stateNameQPrime = "q" + std::to_string(stateCounter);
 	    if(!belongs){//then
-	      std::cout << "q' is a new state. Calling it " << stateNameQPrime << "\n";
+	      if(explainFsaFlag)
+		std::cout << "q' is a new state. Calling it " << stateNameQPrime << "\n";
 	      m_states.emplace(stateNameQPrime, new MachineState{qprime, stateNameQPrime});
 	      destState = stateNameQPrime;
 	      stateCounter++;
 	    } else {
-	      std::cout << "q' is not a new state\n";
+	      if(explainFsaFlag)
+		std::cout << "q' is not a new state\n";
 	    }
 	    registerTransition(pairq.first, destState, b);
 	  }

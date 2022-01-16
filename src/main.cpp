@@ -19,81 +19,129 @@
 #include "fsa/Machine.hpp"
 #include "fsa/MachineNet.hpp"
 #include <ast/AST.hpp>
+#include "common/flags.h"
 
 #include <iostream>
 #include <parser.hpp>
+#include "parser/lexer.hpp"
 #include <string>
+//#include <unistd.h>
+#include <getopt.h>
 
+void initializeFlags();
+void printusage();
 
 int main(int argc, char *argv[])
 {
-    yyparse();
-    MachineNet* net = MachineNet::getInstance();
-    Machine* m=net->getMachine("S");
-    ASTree* t=m->getTree();
-    ASTGenericNode* root=t->getRoot();
-    std::string res =root->isBSNullable() ? "true" : "false" ;
-    //    std::cout<< "should be false (check grammar):\n" << res <<"\n";
+  //Helper variable to describe the required functions to perform, as well as the previous static flags
+  //empty means no function needed
+  std::string fsaGraphFileType{"png"};
+  std::string graphToBePrinted;
+  char c;            //char returned as short options
+  int optionIndex;   //index of the long options
 
-    //    std::cout << "Chech for finBSSet:\n";
-    //    for(auto i : root->finBSSet()){
-    //      std::cout << i.getGrammarChar() << "\n";
-    //    }
+  static const struct option longOptions[] =
+    {
+      {"print-machine", required_argument, nullptr, 'G'},
+      {"image-type", required_argument, nullptr, 'T'},
+      {"help", no_argument, nullptr, 'h'},
+      {"explain-fsa", no_argument, &explainFsaFlag, 1},
+      {"explain-pilot", no_argument, nullptr, 'v'},
+      {"debug", no_argument, nullptr, 'd'},
+      {0, 0, 0, 0}
+    };
+  
+  while ((c = getopt_long(argc, argv, "G:T:hvd", longOptions, &optionIndex)) != -1) {
+    switch (c) {
+    case 0:
+      std::cout << "Setting " <<  longOptions[optionIndex].name << "\n";
+    case 'G':
+      std::cout << "Requesting Graph for machine " << optarg << "\n";
+      graphToBePrinted = optarg;
+      break;
+    case '?':
+    case 'h':
+      std::cout << "help\n";
+      printusage();
+      break;
+    case 'T':
+      std::cout << "Setting image output type " << optarg << "...\n";
+      fsaGraphFileType = optarg;
+      break;
+    case 'v':
+      std::cout << "Requesting explaining pilot automaton contruction.\n";
+      explainPilotFlag = 1;
+      break;
+    case 'd':
+      std::cout << "Enabling debugging informations...\n";
+      debugFlag = 1;
+      explainFsaFlag = 1;
+      explainPilotFlag = 1;
+      break;
+    }
+  }
+
+  if(debugFlag){
+    for(int index = optind; index < argc; index++){
+      std::cout << "Debug: Non option argument: " << argv[index] << "\n";
+    }
+  }
+  
+  if(optind < argc){
+    yyin = fopen(argv[optind], "r");
+    if(!yyin){
+      std::cout << "Error reading file " << argv[optind] << "\n";
+      return 1;
+    }
+    std::cout << "reading grammar " << argv[optind] << "\n";
+  } else {
+    std::cout << "Reading grammar from stdin...\n";
+    yyin = stdin;
+  }
     
-    //    std::cout << "Check per i punti e vrgola\n";
-    //    for(auto m : net->getMachines()){
-    //      std::cout << m.first << "\n";
-    //    }
+  yyparse();
+  MachineNet* net = MachineNet::getInstance();
+  Machine* m; //=net->getMachine("S");
+  ASTree* t; //=m->getTree();
+  ASTGenericNode* root; //=t->getRoot();
 
-    m=net->getMachine("A");
+
+  
+
+    
+  if(graphToBePrinted != ""){
+    m=net->getMachine(graphToBePrinted);
     t=m->getTree();
     root=t->getRoot();
-
-    //    std::cout << "Ini set:\n";
-    //    for(auto i : root->iniBSSet()){
-    //      std::cout << i << ' ';
-    //    }
-    //    std::cout << "\nFin set:\n";
-    //    for(auto i : root->finBSSet()){
-    //      std::cout << i << ' ';
-    //    }
-    auto digSet = root->digBSSet();
-    //    std::cout <<"\nDig set (should not contain <b2, b2> nor <a4, $0>):\n";
-    //    for(auto i : digSet){
-    //      std::cout << i << ' ';
-    //    }
-
-    //    std::cout << "\nAlphabet:\n";
-    //    for(auto i : *(m->getAlphabet())){
-    //      std::cout << i << ' ';
-    //    }
-
-    //    std::cout <<"\nFollowers of b2:\n";
-    //    for(auto i : BSGrammarChar::folBSSet(digSet, BSGrammarChar('b',2))){
-    //      std::cout << i << ' ';
-    //    }
-    //    std::cout <<"\nFollowers of b3:\n";
-    //    for(auto i : BSGrammarChar::folBSSet(digSet, BSGrammarChar('b',3))){
-    //      std::cout << i << ' ';
-    //    }
-    //    std::cout <<"\nFollowers of a:\n";
-    //    for(auto i : BSGrammarChar::folBSSet(digSet, 'a')){
-    //      std::cout << i << ' ';
-    //    }
-    std::cout<<std::endl;
-    
     m->BSBuild();
-    m->printDebug();
-    m->produceDot("A.dot");
+    // m->printDebug();
+  
+    m->produceDot(graphToBePrinted + ".dot");
     //    system("dot -Tpng -o A.png A.dot");
-    m->compileDot("A.dot", "A.png");
-    return 0;
+    m->compileDot(graphToBePrinted + ".dot", graphToBePrinted + "." + fsaGraphFileType, fsaGraphFileType);
+  }
+  return 0;
 
-  // std::cout << "Hi!\n";
-  // Machine simpleRegex{"simpleNameForRegex"};
-  // simpleRegex.addState("q0");
-  // simpleRegex.addState("q1");
-  // simpleRegex.registerTransition("q0", "q1", 'a');
-  // simpleRegex.printDebug();
-  // return 0;
+
+}
+
+// std::string searchGraphFileType(std::string &fsaGraphFileType,
+//                                 std::string commandFlag, char** argv) {
+//   for(auto s : argv)
+// }
+
+void initializeFlags() {
+  explainFsaFlag = 0;
+  explainPilotFlag = 0;
+  debugFlag = 0;
+}
+
+void printusage() {
+  std::cout << "Usage:\n"
+	    << "-h --help \t prints this message\n"
+	    << "-G --print-machine <machine name> \t prints a .dot file of the machine <machine name>\n"
+	    << "-T --image-type <type> \t specifies the file type of the image produced by dot\n"
+	    << "--explain-fsa \t\t explains the construction of the FSA machines uing the Berry-Sethi algorithm\n"
+	    << "-v --explain-pilot \t explains the construction of the pilot automaton for the given grammar (TO BE IMPLEMENTED)\n"
+	    << "-d --debug \t prints all kinds of informations, useful to debug\n";
 }

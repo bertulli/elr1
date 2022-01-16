@@ -24,6 +24,7 @@ int reCurrentPos = 0;
 PRODSIGN                    ":"|"::="|"=>"
 			
 %option noyywrap
+%option header-file="lexer.hpp"
 			
 %%
 [a-z]                       {yylval.bsChar.grammarChar = yytext[0];

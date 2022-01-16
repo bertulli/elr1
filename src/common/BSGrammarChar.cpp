@@ -1,4 +1,5 @@
 #include "BSGrammarChar.hpp"
+#include "flags.h"
 #include <iostream>
 
 BSGrammarChar::BSGrammarChar(char grammarChar, int rePos)
@@ -29,7 +30,7 @@ std::ostream &operator<<(std::ostream &stream, std::set<BSGrammarChar> set) {
   for(auto i : set){
     stream << i << ' ';
   }
-  std::cout << "\n";
+  stream << "\n";
   return stream;
 }
 
@@ -66,18 +67,22 @@ std::set<BSGrammarChar>
 BSGrammarChar::genQPrime(std::set<std::pair<BSGrammarChar, BSGrammarChar>> digBSSet,
          std::set<BSGrammarChar> stateSet, const char keyChar) {
   std::set<BSGrammarChar> res;
-  std::cout << "Generating q':\n";
+  if(explainFsaFlag)
+    std::cout << "Generating q':\n";
   
   for(auto b_i : stateSet){
 
     if(b_i.m_grammarChar == keyChar){
-      std::cout << "    For BSGC " << b_i << ":\n        ";
+      if(explainFsaFlag)
+	std::cout << "    For BSGC " << b_i << ":\n        ";
       for(auto temp : BSGrammarChar::folBSSet(digBSSet, b_i)){
-	std::cout << temp << ' ';
+	if(explainFsaFlag)
+	  std::cout << temp << ' ';
 	res.emplace(temp);
       }
     }
-    std::cout << "\n";
+    if(explainFsaFlag)
+      std::cout << "\n";
   }
   return res;
 }

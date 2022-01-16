@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <common/BSTerminal.hpp>
 #include <common/BSNonTerminal.hpp>
+#include <common/flags.h>
 #include <fsa/MachineNet.hpp>
 #include <string.h>
 #include <ast/AST.hpp>
@@ -81,16 +82,21 @@ rule : NONTERMINAL {std::string machineName{std::string(1, $1.grammarChar)};
                     MachineNet::getInstance()->addMachine(machineName);
 		    ruleAlphabet = new std::set<char>();}
 
-PRODSIGN expr {printf("Rule for %c: %s\n", $1, $4.pexpr);
+PRODSIGN expr {
+               if(debugFlag)
+                	printf("Rule for %c: %s\n", $1, $4.pexpr);
                ASTLeafTerminal* terminalNode = new ASTLeafTerminal('$', 0);
                ASTGenericNode* terminatedRoot = new ASTConcatOperator($4.subtree, terminalNode);
 	       ruleAlphabet->emplace('$');
                (*MachineNet::getInstance())[std::string(1,$1.grammarChar)]->addTree(terminatedRoot);
 	       (*MachineNet::getInstance())[std::string(1,$1.grammarChar)]->addAlphabet(ruleAlphabet);
-               std::cout << '\n';
-               std::cout << "Print tree:\n";
-               (*MachineNet::getInstance())[std::string(1,$1.grammarChar)]->getTree()->print();
-               std::cout << '\n';
+	       if(debugFlag){
+		   std::cout << '\n';
+		   std::cout << "Print tree:\n";
+		   (*MachineNet::getInstance())[std::string(1,$1.grammarChar)]->getTree()->print();
+	       }	       
+	       if(debugFlag)
+		std::cout << '\n';
                }
 	|	/*empty*/
 ;

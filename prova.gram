@@ -5,4 +5,4 @@ S : a|(cb)+|c*
 A ::= (a|bb)*(ac)+
 ;
 
-B ::= abcd
+B ::= ((ab)+)c*d
