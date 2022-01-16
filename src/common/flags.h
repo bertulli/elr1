@@ -1,9 +1,9 @@
 #ifndef FLAGS_H
 #define FLAGS_H
 
-static int explainFsaFlag;
-static int explainPilotFlag;
-static int debugFlag;
+extern int explainFsaFlag;
+extern int explainPilotFlag;
+extern int debugFlag;
 
 
 #endif /* FLAGS_H */

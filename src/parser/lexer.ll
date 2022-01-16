@@ -25,25 +25,31 @@ PRODSIGN                    ":"|"::="|"=>"
 			
 %option noyywrap
 %option header-file="lexer.hpp"
+
+%x COMMENT			
 			
 %%
-[a-z]                       {yylval.bsChar.grammarChar = yytext[0];
+<INITIAL>[a-z]                       {yylval.bsChar.grammarChar = yytext[0];
                              yylval.bsChar.rePos = reCurrentPos;
                              reCurrentPos++; return TERMINAL;}
 
-[A-Z]                       {yylval.bsChar.grammarChar = yytext[0];
+<INITIAL>[A-Z]                       {yylval.bsChar.grammarChar = yytext[0];
                              yylval.bsChar.rePos = reCurrentPos;
                              reCurrentPos++; return NONTERMINAL;}
 
-{PRODSIGN}                  {reCurrentPos = 1; return PRODSIGN;}
-"|"                         {return UNION;}
-"*"                         {return STAR;}
-"+"                         {return CROSS;}
-"."                         {return CONCAT;}
-"("                         {return LPAR;}
-")"                         {return RPAR;}
-";"                         {return SEMICOLON;}
-[ \n\t\r]                   { /*do nothing*/ }
-.                           { /*do nothing*/ }
+<INITIAL>{PRODSIGN}                  {reCurrentPos = 1; return PRODSIGN;}
+<INITIAL>"|"                         {return UNION;}
+<INITIAL>"*"                         {return STAR;}
+<INITIAL>"+"                         {return CROSS;}
+<INITIAL>"."                         {return CONCAT;}
+<INITIAL>"("                         {return LPAR;}
+<INITIAL>")"                         {return RPAR;}
+<INITIAL>";"                         {return SEMICOLON;}
+<INITIAL>[ \n\t\r]                   { /*do nothing*/ }
+<INITIAL>.                           { /*do nothing*/ }
+
+<INITIAL>"//"                        { BEGIN(COMMENT); }
+<COMMENT>.                           { /*do nothing*/ }
+<COMMENT>[\n\r]                      { BEGIN(INITIAL); }
 
 %%

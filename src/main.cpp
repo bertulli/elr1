@@ -31,6 +31,11 @@
 void initializeFlags();
 void printusage();
 
+//to keep synchronized with common/flags.h
+int explainFsaFlag;
+int explainPilotFlag;
+int debugFlag;
+
 int main(int argc, char *argv[])
 {
   //Helper variable to describe the required functions to perform, as well as the previous static flags
@@ -55,6 +60,7 @@ int main(int argc, char *argv[])
     switch (c) {
     case 0:
       std::cout << "Setting " <<  longOptions[optionIndex].name << "\n";
+      break;
     case 'G':
       std::cout << "Requesting Graph for machine " << optarg << "\n";
       graphToBePrinted = optarg;
