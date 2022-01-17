@@ -82,6 +82,7 @@ public:
 
   void printDebug();
 private:
+  void finalizeBSStates();
   std::unordered_map<std::string, MachineState*> m_states;
   ASTree* m_tree;
   std::set<char>* m_alphabet;

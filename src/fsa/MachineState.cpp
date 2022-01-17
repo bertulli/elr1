@@ -51,3 +51,10 @@ std::set<BSGrammarChar> MachineState::getBSState() { return m_BSState; }
 std::set<char> MachineState::getStateAlphabet() { return m_stateAlphabet; }
 
 bool MachineState::isMarked(){ return m_BSMarked; }
+
+bool MachineState::isFinal() { return m_final; }
+
+void MachineState::makeFinal() {
+  m_final = true;
+  return;
+}

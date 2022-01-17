@@ -37,6 +37,7 @@ public:
   bool isFinal();
   bool isMarked();
   void mark();
+  void makeFinal();
 private:
   std::string m_name;
   std::unordered_map<char, std::string>* m_transitions;

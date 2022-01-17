@@ -141,7 +141,19 @@ bool Machine::BSBuild() {
       }
     }
   }
+  finalizeBSStates();
   return true;
+}
+
+void Machine::finalizeBSStates() {
+  for(auto state : m_states){
+    std::set<BSGrammarChar> BSState{state.second->getBSState()};
+    BSGrammarChar terminator{'$', 0};
+    if(BSState.count(terminator) > 0){
+      state.second->makeFinal();
+    }
+  }
+  return;
 }
 
 bool Machine::produceDot(std::string fileName) {
@@ -149,7 +161,11 @@ bool Machine::produceDot(std::string fileName) {
   file << "strict digraph{\n"
        << "node [shape=circle];\n";
   for(auto state : m_states){
-    file << state.first << ";\n";
+    file << state.first;
+    if(state.second->isFinal()){
+      file << " [shape=doublecircle]";
+    }
+    file << ";\n";
   }
   for(auto state : m_states){
     for(auto transition : *state.second->getTransitions()){
