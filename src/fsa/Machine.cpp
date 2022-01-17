@@ -86,8 +86,9 @@ void Machine::printDebug(){
 
 bool Machine::BSBuild() {
   //q0 = ini(e'$)
-  MachineState* q0 = new MachineState{getTree()->getRoot()->iniBSSet(), "q0"};
+  MachineState* q0 = new MachineState{getTree()->getRoot()->iniBSSet(), "q0", true};
   addState(q0);
+  m_initialState = "q0";
   std::set <std::pair<BSGrammarChar, BSGrammarChar>> digSet = getTree()->getRoot()->digBSSet();
   int stateCounter{1};
   bool finished{false};
@@ -160,6 +161,8 @@ bool Machine::produceDot(std::string fileName) {
   std::ofstream file{fileName};
   file << "strict digraph{\n"
        << "node [shape=circle];\n";
+
+  file << "\"\" [shape=none]\n"; //adding initial arrow
   for(auto state : m_states){
     file << state.first;
     if(state.second->isFinal()){
@@ -167,6 +170,8 @@ bool Machine::produceDot(std::string fileName) {
     }
     file << ";\n";
   }
+
+  file << "\"\" -> " << m_initialState << ";\n";
   for(auto state : m_states){
     for(auto transition : *state.second->getTransitions()){
       file << state.first << " -> " << transition.second << " [label=\" "

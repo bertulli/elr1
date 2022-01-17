@@ -25,8 +25,8 @@ MachineState::MachineState(std::string name, bool finalState)
   m_transitions = new std::unordered_map<char, std::string>;
 }
 
-MachineState::MachineState(std::set<BSGrammarChar> BSState, std::string name)
-    : m_BSState{BSState}, m_BSMarked{false}, m_name{name} {
+MachineState::MachineState(std::set<BSGrammarChar> BSState, std::string name, bool initial)
+  : m_BSState{BSState}, m_BSMarked{false}, m_name{name}, m_initial{initial} {
   m_transitions = new std::unordered_map<char, std::string>;
   for(auto b_i : m_BSState){
     m_stateAlphabet.emplace(b_i.getGrammarChar());

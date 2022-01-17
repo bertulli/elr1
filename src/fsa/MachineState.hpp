@@ -28,7 +28,7 @@
 class MachineState{
 public:
   MachineState(std::string name, bool finalState);
-  MachineState(std::set<BSGrammarChar> BSState, std::string name = "");
+  MachineState(std::set<BSGrammarChar> BSState, std::string name = "", bool initial = false);
   bool addTransition(char grammarChar, std::string dest);
   std::unordered_map<char, std::string>* getTransitions();
   std::string getName();
@@ -43,6 +43,7 @@ private:
   std::unordered_map<char, std::string>* m_transitions;
   std::set<BSGrammarChar> m_BSState;
   std::set<char> m_stateAlphabet;
+  bool m_initial;
   bool m_final;
   bool m_BSMarked;
 };
