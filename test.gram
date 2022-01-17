@@ -1,5 +1,5 @@
-A : aa
+A : a|(b&a)
 //c1a0
-aa //b
-c
+//aa //b
+//c
 ;

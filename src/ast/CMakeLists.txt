@@ -30,6 +30,8 @@ add_library(astlib
   AST.hpp
   ASTInternalNode.cpp
   ASTInternalNode.hpp
+  ASTLeafEpsilon.cpp
+  ASTLeafEpsilon.hpp
   ASTLeafNode.cpp
   ASTLeafNode.hpp
   ASTLeafNonTerminal.cpp

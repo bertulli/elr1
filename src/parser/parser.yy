@@ -60,13 +60,14 @@ char* pcross(char* subexp);
 
 %type	<expr>		expr
 %token PRODSIGN
-%token SEMICOLON			
+%token SEMICOLON
+%token	<bsChar>	EPSILON			
 %start grammar			
 
 %precedence LPAR RPAR
 %left			UNION
-%left	<bsChar>		TERMINAL
-%left	<bsChar>		NONTERMINAL			
+%left	<bsChar>	TERMINAL
+%left	<bsChar>	NONTERMINAL			
 %left			CONCAT
 %left			STAR CROSS
 %precedence             NEST
@@ -121,6 +122,14 @@ expr : TERMINAL {$$.pexpr = (char*) malloc(sizeof(char) * 2);
                  // create leaf node
                  $$.subtree = new ASTLeafNonTerminal($1.grammarChar, $1.rePos);
                  }
+|	EPSILON {$$.pexpr = (char*) malloc(sizeof(char) * 2);
+                 $$.pexpr[0] = $1.grammarChar;
+		 $$.pexpr[1] = '\0';
+
+		 //create leaf node
+		 $$.subtree = new ASTLeafEpsilon($1.rePos);
+		 }
+    
 
 | 	expr UNION expr {$$.pexpr = punion($1.pexpr, $3.pexpr);
                          //create union node

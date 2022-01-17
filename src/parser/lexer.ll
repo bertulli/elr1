@@ -34,8 +34,12 @@ PRODSIGN                    ":"|"::="|"=>"
                              reCurrentPos++; return TERMINAL;}
 
 <INITIAL>[A-Z]                       {yylval.bsChar.grammarChar = yytext[0];
-                             yylval.bsChar.rePos = reCurrentPos;
+                                      yylval.bsChar.rePos = reCurrentPos;
                              reCurrentPos++; return NONTERMINAL;}
+
+<INITIAL>"&"                         {yylval.bsChar.grammarChar = ' ';
+                                      yylval.bsChar.rePos = reCurrentPos;
+                                      reCurrentPos++; return EPSILON;}
 
 <INITIAL>{PRODSIGN}                  {reCurrentPos = 1; return PRODSIGN;}
 <INITIAL>"|"                         {return UNION;}

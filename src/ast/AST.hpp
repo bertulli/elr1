@@ -25,6 +25,7 @@
 #include <ASTLeafNode.hpp>
 #include <ASTLeafNonTerminal.hpp>
 #include <ASTLeafTerminal.hpp>
+#include <ASTLeafEpsilon.hpp>
 #include <ASTree.hpp>
 #include <ASTUnaryOperator.hpp>
 #include <ASTUnionOperator.hpp>
