@@ -159,7 +159,7 @@ void Machine::finalizeBSStates() {
 
 bool Machine::produceDot(std::string fileName) {
   std::ofstream file{fileName};
-  file << "strict digraph{\n"
+  file << "digraph{\n"
        << "node [shape=circle];\n";
 
   file << "\"\" [shape=none]\n"; //adding initial arrow
