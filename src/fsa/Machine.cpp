@@ -86,9 +86,10 @@ void Machine::printDebug(){
 
 bool Machine::BSBuild() {
   //q0 = ini(e'$)
-  MachineState* q0 = new MachineState{getTree()->getRoot()->iniBSSet(), "q0", true};
+  std::string initialStateName = "0" + m_machineName;
+  MachineState* q0 = new MachineState{getTree()->getRoot()->iniBSSet(), initialStateName, true};
   addState(q0);
-  m_initialState = "q0";
+  m_initialState = initialStateName;
   std::set <std::pair<BSGrammarChar, BSGrammarChar>> digSet = getTree()->getRoot()->digBSSet();
   int stateCounter{1};
   bool finished{false};
@@ -125,7 +126,7 @@ bool Machine::BSBuild() {
 		break;
 	      }
 	    }
-	    std::string stateNameQPrime = "q" + std::to_string(stateCounter);
+	    std::string stateNameQPrime = std::to_string(stateCounter) + m_machineName;
 	    if(!belongs){//then
 	      if(explainFsaFlag)
 		std::cout << "q' is a new state. Calling it " << stateNameQPrime << "\n";
@@ -164,17 +165,17 @@ bool Machine::produceDot(std::string fileName) {
 
   file << "\"\" [shape=none]\n"; //adding initial arrow
   for(auto state : m_states){
-    file << state.first;
+    file << '"' << state.first << '"';
     if(state.second->isFinal()){
       file << " [shape=doublecircle]";
     }
     file << ";\n";
   }
 
-  file << "\"\" -> " << m_initialState << ";\n";
+  file << "\"\" -> \"" << m_initialState << "\";\n";
   for(auto state : m_states){
     for(auto transition : *state.second->getTransitions()){
-      file << state.first << " -> " << transition.second << " [label=\" "
+      file << '"' << state.first << '"' << " -> " << '"' << transition.second << '"' << " [label=\" "
 	   << transition.first << " \"];\n";
     }
   }
