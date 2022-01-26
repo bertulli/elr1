@@ -9,6 +9,12 @@ doc/
 *.png
 *.jpeg
 
+#ignore latex files
+*.tex
+*.log
+*.aux
+*.pdf
+
 #ignore emcas .dir-locals
 .dir-locals.el
 

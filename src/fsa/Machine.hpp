@@ -20,10 +20,16 @@
 /*************************************************************************/
 
 #include "MachineState.hpp"
+#include "DotPrinter.hpp"
+#include "LatexPrinter.hpp"
 #include "../ast/ASTGenericNode.hpp"
 #include "../ast/ASTree.hpp"
 #include <unordered_map>
 #include <string>
+
+class DotPrinter; //for compiler
+class MachinePrinter;
+class LatexPrinter;
 
 class Machine{
 public:
@@ -74,13 +80,37 @@ public:
 
   std::set<char>* getAlphabet();
 
+  MachineState * getState(std::string state);
+
+  std::string getInitialState();
+
   bool BSBuild();
 
-  bool produceDot(std::string fileName);
+  //taken form https://en.wikipedia.org/wiki/Pairing_function
+  int index(int x, int y);
 
-  bool compileDot(std::string inputFile, std::string outputFile, std::string fileType = "png");
+  std::pair<int, int> coord(int index);
+
+  std::pair<int, int> latexCoord(int index);
+
+  //  bool produceDot(std::string fileName);
+
+  //  bool compileDot(std::string inputFile, std::string outputFile, std::string fileType = "png");
+
+  std::set<char> iniPilotInitialStateSet();
 
   void printDebug();
+
+  void setPrinter(MachinePrinter* printer);
+
+  void print(std::string filePath);
+
+  void setFileType(std::string fileType);
+  
+  bool compileFile(std::string inputFile, std::string outputFile);
+
+  friend void DotPrinter::printOnFile(std::string fileName, Machine* machine);
+  friend void LatexPrinter::printOnFile(std::string fileName, Machine* machine);
 private:
   void finalizeBSStates();
   std::unordered_map<std::string, MachineState*> m_states;
@@ -88,6 +118,7 @@ private:
   std::set<char>* m_alphabet;
   std::string m_initialState;
   std::string m_machineName;
+  MachinePrinter* m_printer;
 };
 
 #endif /* FSA_H */

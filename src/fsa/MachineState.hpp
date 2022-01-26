@@ -23,17 +23,19 @@
 #include <unordered_map>
 #include "../common/BSTerminal.hpp"
 
+class Machine; //to make the compiler happy
 
 
 class MachineState{
 public:
-  MachineState(std::string name, bool finalState);
-  MachineState(std::set<BSGrammarChar> BSState, std::string name = "", bool initial = false);
+  MachineState(std::string name, bool finalState, Machine* machine);
+  MachineState(std::set<BSGrammarChar> BSState, Machine* machine, std::string name = "", bool initial = false);
   bool addTransition(char grammarChar, std::string dest);
   std::unordered_map<char, std::string>* getTransitions();
   std::string getName();
   std::set<BSGrammarChar> getBSState();
   std::set<char> getStateAlphabet();
+  std::set<char> iniPilotSet();
   bool isFinal();
   bool isMarked();
   void mark();
@@ -43,9 +45,12 @@ private:
   std::unordered_map<char, std::string>* m_transitions;
   std::set<BSGrammarChar> m_BSState;
   std::set<char> m_stateAlphabet;
+  Machine * m_machine;
   bool m_initial;
   bool m_final;
   bool m_BSMarked;
+  int m_xLatex;
+  int m_yLatex;
 };
 
 #endif /* MACHINESTATE_H */

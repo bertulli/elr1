@@ -25,6 +25,9 @@ add_library(fsalib #name
    # Machine.hpp
    MachineState.cpp
    MachineNet.cpp
+   DotPrinter.cpp
+   LatexPrinter.cpp
+   MachinePrinter.hpp
    )
 
 target_include_directories(fsalib PUBLIC

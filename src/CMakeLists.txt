@@ -21,6 +21,7 @@ add_subdirectory(fsa)
 add_subdirectory(ast)
 add_subdirectory(parser)
 add_subdirectory(common)
+add_subdirectory(pilot)
 #to create a library
 
 #include_directories(${CMAKE_CURRENT_BINARY_DIR})
@@ -47,4 +48,5 @@ target_link_libraries(elr1 #target in which link
   astlib
   parserlib
   commonlib
+  pilotlib
   )

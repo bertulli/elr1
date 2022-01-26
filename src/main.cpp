@@ -18,8 +18,11 @@
 
 #include "fsa/Machine.hpp"
 #include "fsa/MachineNet.hpp"
+#include "fsa/LatexPrinter.hpp"
+#include "fsa/DotPrinter.hpp"
 #include <ast/AST.hpp>
 #include "common/flags.h"
+#include "pilot/Item.hpp"
 
 #include <iostream>
 #include <parser.hpp>
@@ -34,6 +37,8 @@ void printusage();
 //to keep synchronized with common/flags.h
 int explainFsaFlag;
 int explainPilotFlag;
+int latexFlag;
+int graphvizFlag;
 int debugFlag;
 
 int main(int argc, char *argv[])
@@ -48,6 +53,8 @@ int main(int argc, char *argv[])
   static const struct option longOptions[] =
     {
       {"print-machine", required_argument, nullptr, 'G'},
+      {"latex", no_argument, nullptr, 'L'},
+      {"graphviz", no_argument, nullptr, 'g'},
       {"image-type", required_argument, nullptr, 'T'},
       {"help", no_argument, nullptr, 'h'},
       {"explain-fsa", no_argument, &explainFsaFlag, 1},
@@ -73,6 +80,14 @@ int main(int argc, char *argv[])
     case 'T':
       std::cout << "Setting image output type " << optarg << "...\n";
       fsaGraphFileType = optarg;
+      break;
+    case 'L':
+      latexFlag = 1;
+      graphvizFlag = 0;
+      break;
+    case 'g':
+      graphvizFlag = 1;
+      latexFlag = 0;
       break;
     case 'v':
       std::cout << "Requesting explaining pilot automaton contruction.\n";
@@ -111,7 +126,19 @@ int main(int argc, char *argv[])
   ASTree* t; //=m->getTree();
   ASTGenericNode* root; //=t->getRoot();
 
+  m = net->getMachine("E");
+  m->BSBuild();
+  
 
+  
+  if(debugFlag){
+    Item initial{m->getInitialState(), m, m->getState(net->getMachine("E")->getInitialState()), {'$'}};
+    
+    std::cout << "Initial candidate:\n"
+	      << initial << "\n";
+
+    std::cout << "closure:\n" << initial.closure() << "\n";
+  }
   
 
     
@@ -121,10 +148,22 @@ int main(int argc, char *argv[])
     root=t->getRoot();
     m->BSBuild();
     // m->printDebug();
-  
-    m->produceDot(graphToBePrinted + ".dot");
+    if(latexFlag){
+      m->setPrinter(LatexPrinter::getInstance());
+      m->print(graphToBePrinted + ".tex");
+      m->setFileType("whatever");
+      m->compileFile(graphToBePrinted, graphToBePrinted);
+    } else if(graphvizFlag){
+      m->setPrinter(DotPrinter::getInstance());
+      m->print(graphToBePrinted + ".dot");
+      m->setFileType("png");
+      m->compileFile(graphToBePrinted, graphToBePrinted);
+    }
+    
+    
+    //m->produceDot(graphToBePrinted + ".dot");
     //    system("dot -Tpng -o A.png A.dot");
-    m->compileDot(graphToBePrinted + ".dot", graphToBePrinted + "." + fsaGraphFileType, fsaGraphFileType);
+    //m->compileDot(graphToBePrinted + ".dot", graphToBePrinted + "." + fsaGraphFileType, fsaGraphFileType);
   }
   return 0;
 

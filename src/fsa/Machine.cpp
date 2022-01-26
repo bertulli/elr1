@@ -17,6 +17,7 @@
 /*************************************************************************/
 
 #include "Machine.hpp"
+#include "MachinePrinter.hpp"
 #include "MachineState.hpp"
 #include "../ast/ASTGenericNode.hpp"
 #include "../ast/ASTree.hpp"
@@ -27,8 +28,9 @@
 #include <utility>
 #include <iostream>
 #include <fstream>
+#include <math.h>
 
-constexpr int bufferSize{50};
+
 
 Machine::Machine(std::string machineName)
   : m_machineName{machineName}
@@ -46,10 +48,16 @@ bool Machine::addAlphabet(std::set<char>* alphabet) {
 
 ASTree *Machine::getTree() { return m_tree; }
 
-std::set<char>* Machine::getAlphabet(){ return m_alphabet; }
+std::set<char> *Machine::getAlphabet() { return m_alphabet; }
+
+MachineState *Machine::getState(std::string state) { return m_states[state]; }
+
+std::string Machine::getInitialState() {
+  return m_initialState;
+}
 
 bool Machine::addState(std::set<BSGrammarChar> BSSet, std::string stateName, bool finalState, bool initialState){
-  MachineState *newStatePtr = new MachineState{BSSet, stateName};
+  MachineState *newStatePtr = new MachineState{BSSet, this, stateName};
   std::pair<std::string, MachineState*> newPair{stateName, newStatePtr};
   m_states.insert(newPair);
   if(initialState){
@@ -71,6 +79,36 @@ bool Machine::registerTransition(std::string sourceState, std::string destState,
   return true;
 }
 
+
+int Machine::index(int x, int y) {
+  return ((x + y) * (x + y + 1)) / 2 + y;
+}
+
+std::pair<int, int> Machine::coord(int index) {
+  int w = (int) ((sqrt(8 * index + 1) - 1) / 2);
+  int t = (w * w + w) / 2;
+  int y = index - t;
+  int x = w - y;
+  return std::make_pair(x, y);
+}
+
+std::pair<int, int> Machine::latexCoord(int index) {
+  constexpr int scaleFactor{3};
+  auto pair = coord(index);
+  return std::make_pair(pair.first * scaleFactor, -pair.second * scaleFactor);
+}
+
+void Machine::setPrinter(MachinePrinter *printer) {
+  m_printer = printer;
+}
+
+void Machine::print(std::string filePath) {
+  std::cout << "Printing " << filePath << "... ";
+  m_printer->printOnFile(filePath, this);
+  std::cout << "done\n";
+  return;
+}
+
 void Machine::printDebug(){
   std::cout << m_machineName << " debug informations\n"
 	    << "States of the machine:\n";
@@ -84,10 +122,14 @@ void Machine::printDebug(){
   return;
 }
 
+std::set<char> Machine::iniPilotInitialStateSet() {
+  return m_states[m_initialState]->iniPilotSet();
+}
+
 bool Machine::BSBuild() {
   //q0 = ini(e'$)
   std::string initialStateName = "0" + m_machineName;
-  MachineState* q0 = new MachineState{getTree()->getRoot()->iniBSSet(), initialStateName, true};
+  MachineState* q0 = new MachineState{getTree()->getRoot()->iniBSSet(), this, initialStateName, true};
   addState(q0);
   m_initialState = initialStateName;
   std::set <std::pair<BSGrammarChar, BSGrammarChar>> digSet = getTree()->getRoot()->digBSSet();
@@ -130,7 +172,7 @@ bool Machine::BSBuild() {
 	    if(!belongs){//then
 	      if(explainFsaFlag)
 		std::cout << "q' is a new state. Calling it " << stateNameQPrime << "\n";
-	      m_states.emplace(stateNameQPrime, new MachineState{qprime, stateNameQPrime});
+	      m_states.emplace(stateNameQPrime, new MachineState{qprime, this, stateNameQPrime});
 	      destState = stateNameQPrime;
 	      stateCounter++;
 	    } else {
@@ -158,45 +200,21 @@ void Machine::finalizeBSStates() {
   return;
 }
 
-bool Machine::produceDot(std::string fileName) {
-  std::ofstream file{fileName};
-  file << "digraph{\n"
-       << "node [shape=circle];\n";
+// bool Machine::produceDot(std::string fileName) {
+  
+//   return true;
+// }
 
-  file << "\"\" [shape=none]\n"; //adding initial arrow
-  for(auto state : m_states){
-    file << '"' << state.first << '"';
-    if(state.second->isFinal()){
-      file << " [shape=doublecircle]";
-    }
-    file << ";\n";
-  }
+// bool Machine::compileDot(std::string inputFile, std::string outputFile,
+//                          std::string fileType) {
+//   return true;
+// }
 
-  file << "\"\" -> \"" << m_initialState << "\";\n";
-  for(auto state : m_states){
-    for(auto transition : *state.second->getTransitions()){
-      file << '"' << state.first << '"' << " -> " << '"' << transition.second << '"' << " [label=\" "
-	   << transition.first << " \"];\n";
-    }
-  }
-  file << "}";
-  return true;
+void Machine::setFileType(std::string fileType){
+  m_printer->setFileType(fileType);
+  return;
 }
 
-bool Machine::compileDot(std::string inputFile, std::string outputFile,
-                         std::string fileType) {
-  char command[bufferSize];
-  std::vector<char> vinputFile(inputFile.c_str(), inputFile.c_str() + inputFile.size() + 1);
-  std::vector<char> voutputFile(outputFile.c_str(), outputFile.c_str() + outputFile.size() + 1);
-  std::vector<char> vfileType(fileType.c_str(), fileType.c_str() + fileType.size() + 1);
-
-  char* cinputFile = vinputFile.data();
-  char* coutputFile = voutputFile.data();
-  char* cfileType = vfileType.data();
-  
-  sprintf(command, "dot -T%s -o %s %s", cfileType, coutputFile, cinputFile);
-  std::cout << "Running " << command << "...\n";
-  system(command);
-  std::cout << "Done\n";
-  return true;
+bool Machine::compileFile(std::string inputFile, std::string outputFile){
+  return m_printer->compileFile(inputFile, outputFile);
 }

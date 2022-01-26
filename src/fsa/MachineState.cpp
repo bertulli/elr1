@@ -17,16 +17,17 @@
 /*************************************************************************/
 
 #include "MachineState.hpp"
+#include "MachineNet.hpp"
 #include <unordered_map>
 #include <utility>
 
-MachineState::MachineState(std::string name, bool finalState)
-  : m_name{name}, m_final{finalState}, m_BSMarked{false} {
+MachineState::MachineState(std::string name, bool finalState, Machine* machine)
+  : m_name{name}, m_final{finalState}, m_machine{machine}, m_BSMarked{false} {
   m_transitions = new std::unordered_map<char, std::string>;
 }
 
-MachineState::MachineState(std::set<BSGrammarChar> BSState, std::string name, bool initial)
-  : m_BSState{BSState}, m_BSMarked{false}, m_name{name}, m_initial{initial} {
+MachineState::MachineState(std::set<BSGrammarChar> BSState, Machine* machine, std::string name, bool initial)
+  : m_BSState{BSState}, m_machine{machine}, m_BSMarked{false}, m_name{name}, m_initial{initial} {
   m_transitions = new std::unordered_map<char, std::string>;
   for(auto b_i : m_BSState){
     m_stateAlphabet.emplace(b_i.getGrammarChar());
@@ -49,6 +50,24 @@ std::string MachineState::getName(){ return m_name; }
 std::set<BSGrammarChar> MachineState::getBSState() { return m_BSState; }
 
 std::set<char> MachineState::getStateAlphabet() { return m_stateAlphabet; }
+
+std::set<char> MachineState::iniPilotSet() {
+  std::set<char> res;
+  for(auto t : *m_transitions){
+    char c = t.first;
+    if(c > 'a' && c < 'z'){  //is lowercase, therefore a terminal
+      res.emplace(c);
+    } else {  //is capital, therefore a non terminal
+      std::set<char> iniB = MachineNet::getInstance()->getMachine(std::string(1,c))->iniPilotInitialStateSet();
+      if(! iniB.empty()){ //ini(B) non nullable
+	res.merge(iniB);
+      } else { //ini(B) nullable
+	res.merge(m_machine->getState(t.second)->iniPilotSet());
+      }
+    }
+  }
+  return res;
+}
 
 bool MachineState::isMarked(){ return m_BSMarked; }
 
