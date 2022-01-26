@@ -22,11 +22,14 @@ void DotPrinter::printOnFile(std::string filePath, Machine *machine) {
 
   file << "\"\" [shape=none]\n"; //adding initial arrow
   for(auto state : machine->m_states){
+    std::string machineId{state.first.substr(state.first.size() - 1)};
+    std::string stateId{state.first.substr(0, state.first.size() - 1)};
     file << '"' << state.first << '"';
+    file << " [";
     if(state.second->isFinal()){
-      file << " [shape=doublecircle]";
+      file << "shape=doublecircle ";
     }
-    file << ";\n";
+    file << "label=<" << stateId << "<SUB>" << machineId << "</SUB>>];\n";
   }
 
   file << "\"\" -> \"" << machine->m_initialState << "\";\n";
