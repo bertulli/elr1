@@ -17,7 +17,8 @@ DotPrinter* DotPrinter::getInstance(){
 void DotPrinter::printOnFile(std::string filePath, Machine *machine) {
   std::ofstream file{filePath};
   file << "digraph{\n"
-       << "node [shape=circle];\n";
+       << "node [shape=circle];\n"
+       << "rankdir=LR;\n";
 
   file << "\"\" [shape=none]\n"; //adding initial arrow
   for(auto state : machine->m_states){
