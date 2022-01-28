@@ -23,6 +23,7 @@
 #include <ast/AST.hpp>
 #include "common/flags.h"
 #include "pilot/Item.hpp"
+#include "pilot/MState.hpp"
 
 #include <iostream>
 #include <parser.hpp>
@@ -122,22 +123,28 @@ int main(int argc, char *argv[])
     
   yyparse();
   MachineNet* net = MachineNet::getInstance();
+
+  for(auto m : net->getMachines()){
+    m.second->BSBuild();
+  }
+  
   Machine* m; //=net->getMachine("S");
   ASTree* t; //=m->getTree();
   ASTGenericNode* root; //=t->getRoot();
 
-  m = net->getMachine("E");
-  m->BSBuild();
   
 
   
   if(debugFlag){
-    Item initial{m->getInitialState(), m, m->getState(net->getMachine("E")->getInitialState()), {'$'}};
     
-    std::cout << "Initial candidate:\n"
-	      << initial << "\n";
-
-    std::cout << "closure:\n" << initial.closure() << "\n";
+    m = net->getMachine("S");
+    Item initial{"0S", m, m->getState("0S"), {'$'}};
+    MState I0{{initial}};
+    MState I3{{Item{"1S", m, m->getState("1S"), {'b'}}}};
+    I3.buildClosure();
+    I0.buildClosure();
+    std::cout << I0<<I3;
+    
   }
   
 

@@ -55,16 +55,20 @@ std::set<char> MachineState::iniPilotSet() {
   std::set<char> res;
   for(auto t : *m_transitions){
     char c = t.first;
-    if(c > 'a' && c < 'z'){  //is lowercase, therefore a terminal
+    if(c >= 'a' && c <= 'z'){  //is lowercase, therefore a terminal
       res.emplace(c);
-    } else {  //is capital, therefore a non terminal
+    } else if(c >= 'A' && c <= 'Z') {  //is capital, therefore a non terminal
       std::set<char> iniB = MachineNet::getInstance()->getMachine(std::string(1,c))->iniPilotInitialStateSet();
-      if(! iniB.empty()){ //ini(B) non nullable
+      if(! iniB.empty()){ //ini(B) non empty
 	res.merge(iniB);
-      } else { //ini(B) nullable
+      }
+      if(iniB.count('&') == 1){ //ini(B) nullable
 	res.merge(m_machine->getState(t.second)->iniPilotSet());
       }
     }
+  }
+  if(isFinal()){
+    res.emplace('&');
   }
   return res;
 }
