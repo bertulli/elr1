@@ -21,6 +21,7 @@
 
 extern int explainFsaFlag;
 extern int explainPilotFlag;
+extern int printPilotFlag;
 extern int latexFlag;
 extern int graphvizFlag;
 extern int debugFlag;

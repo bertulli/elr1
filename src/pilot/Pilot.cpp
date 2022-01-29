@@ -19,6 +19,7 @@
 #include "Pilot.hpp"
 
 #include "../fsa/MachineNet.hpp"
+#include "../common/flags.h"
 
 Pilot *Pilot::m_instance = nullptr;
 
@@ -41,6 +42,16 @@ void Pilot::setPrinter(PilotPrinter* printer){
 
 void Pilot::printOnFile(std::string filePath){
   m_printer->printOnFile(filePath);
+  return;
+}
+
+void Pilot::setFileType(std::string imageFileType) {
+  m_printer->setFileType(imageFileType);
+  return;
+}
+
+void Pilot::compileFile(std::string sourceFile, std::string destFile) {
+  m_printer->compileFile(sourceFile,destFile);
   return;
 }
 
@@ -77,10 +88,13 @@ Pilot::Pilot() {
 	I->mark();
 	for(auto X : MachineNet::getInstance()->getAlphabet()){
 	  MState Iprime{I->delta(X)};
-	  std::cout<<"Iprime:"<<Iprime<<'\n';
+	  if(debugFlag){
+	    std::cout<<"Iprime:"<<Iprime<<'\n';
+	  }
 	  Iprime.buildClosure();
-	  std::cout<<"Iwithclosure:"<<Iprime<<'\n';
-
+	  if(debugFlag){
+	    std::cout<<"Iwithclosure:"<<Iprime<<'\n';
+	  }
 	  if(!Iprime.isEmpty()){
 	    pilotModified = true;
 	    //find Iprime

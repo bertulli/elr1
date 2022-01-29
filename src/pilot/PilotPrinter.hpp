@@ -27,6 +27,10 @@ public:
   PilotPrinter() {};
   virtual ~PilotPrinter(){};
   virtual void printOnFile(std::string filePath)=0;
+  virtual void setFileType(std::string fileType)=0;
+  virtual void compileFile(std::string sourceFile, std::string destFile)=0;
+protected:
+  std::string m_fileType;
 };
 
 

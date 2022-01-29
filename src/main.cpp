@@ -40,6 +40,7 @@ void printusage();
 //to keep synchronized with common/flags.h
 int explainFsaFlag;
 int explainPilotFlag;
+int printPilotFlag;
 int latexFlag;
 int graphvizFlag;
 int debugFlag;
@@ -48,8 +49,9 @@ int main(int argc, char *argv[])
 {
   //Helper variable to describe the required functions to perform, as well as the previous static flags
   //empty means no function needed
-  std::string fsaGraphFileType{"png"};
+  std::string dotGraphFileType{"png"};
   std::string graphToBePrinted;
+  std::string grammarName;
   char c;            //char returned as short options
   int optionIndex;   //index of the long options
 
@@ -58,6 +60,7 @@ int main(int argc, char *argv[])
       {"print-machine", required_argument, nullptr, 'G'},
       {"latex", no_argument, nullptr, 'L'},
       {"graphviz", no_argument, nullptr, 'g'},
+      {"pilot", no_argument, &printPilotFlag, 1},
       {"image-type", required_argument, nullptr, 'T'},
       {"help", no_argument, nullptr, 'h'},
       {"explain-fsa", no_argument, &explainFsaFlag, 1},
@@ -66,7 +69,7 @@ int main(int argc, char *argv[])
       {0, 0, 0, 0}
     };
   
-  while ((c = getopt_long(argc, argv, "G:T:hvd", longOptions, &optionIndex)) != -1) {
+  while ((c = getopt_long(argc, argv, "G:T:phvd", longOptions, &optionIndex)) != -1) {
     switch (c) {
     case 0:
       std::cout << "Setting " <<  longOptions[optionIndex].name << "\n";
@@ -82,7 +85,7 @@ int main(int argc, char *argv[])
       break;
     case 'T':
       std::cout << "Setting image output type " << optarg << "...\n";
-      fsaGraphFileType = optarg;
+      dotGraphFileType = optarg;
       break;
     case 'L':
       latexFlag = 1;
@@ -95,6 +98,9 @@ int main(int argc, char *argv[])
     case 'v':
       std::cout << "Requesting explaining pilot automaton contruction.\n";
       explainPilotFlag = 1;
+      break;
+    case 'p':
+      printPilotFlag=1;
       break;
     case 'd':
       std::cout << "Enabling debugging informations...\n";
@@ -112,6 +118,7 @@ int main(int argc, char *argv[])
   }
   
   if(optind < argc){
+    grammarName=argv[optind];
     yyin = fopen(argv[optind], "r");
     if(!yyin){
       std::cout << "Error reading file " << argv[optind] << "\n";
@@ -119,6 +126,7 @@ int main(int argc, char *argv[])
     }
     std::cout << "reading grammar " << argv[optind] << "\n";
   } else {
+    grammarName="stdin";
     std::cout << "Reading grammar from stdin...\n";
     yyin = stdin;
   }
@@ -169,7 +177,7 @@ int main(int argc, char *argv[])
     } else if(graphvizFlag){
       m->setPrinter(DotPrinter::getInstance());
       m->print(graphToBePrinted + ".dot");
-      m->setFileType("png");
+      m->setFileType(dotGraphFileType);
       m->compileFile(graphToBePrinted, graphToBePrinted);
     }
     
@@ -178,6 +186,13 @@ int main(int argc, char *argv[])
     //    system("dot -Tpng -o A.png A.dot");
     //m->compileDot(graphToBePrinted + ".dot", graphToBePrinted + "." + fsaGraphFileType, fsaGraphFileType);
   }
+  if(printPilotFlag){
+      Pilot* p{Pilot::getInstance()};
+      p->setPrinter(PilotDotPrinter::getInstance());
+      p->printOnFile(grammarName+".dot");
+      p->setFileType(dotGraphFileType);
+      p->compileFile(grammarName, grammarName);
+    }
   return 0;
 
 

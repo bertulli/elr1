@@ -20,6 +20,7 @@
 #include "Pilot.hpp"
 
 #include <fstream>
+#include <cstdlib>
 
 PilotDotPrinter* PilotDotPrinter::getInstance(){
   static PilotDotPrinter m_dotPrinter;
@@ -68,4 +69,19 @@ void PilotDotPrinter::printOnFile(std::string filePath){
 
   }
   file << '}';
+}
+
+void PilotDotPrinter::setFileType(std::string fileType) {
+  m_fileType = fileType;
+  return;
+}
+
+void PilotDotPrinter::compileFile(std::string sourceFile,
+                                  std::string destFile) {
+  std::string command{"dot -T"+m_fileType+" -o "+destFile +'.'+m_fileType+" "+sourceFile+".dot"};
+  std::cout<<"Running " <<command<<"... ";
+  std::vector<char> vcommand{command.c_str(), command.c_str()+command.size()+1};
+  char* ccommand{vcommand.data()};
+  system(ccommand);
+  std::cout<<"done\n";
 }

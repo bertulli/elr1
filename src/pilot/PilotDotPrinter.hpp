@@ -27,6 +27,8 @@ public:
   static PilotDotPrinter* getInstance();
   virtual ~PilotDotPrinter();
   void printOnFile(std::string filePath) override;
+  void setFileType(std::string fileType)override;
+  void compileFile(std::string sourceFile, std::string destFile)override;
 private:
   PilotDotPrinter();  
 };

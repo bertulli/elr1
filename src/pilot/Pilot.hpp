@@ -31,13 +31,14 @@ public:
   std::unordered_map<std::string, MState*> getMStates();
   void print();
   void setPrinter(PilotPrinter* printer);
+  void setFileType(std::string imageFileType);
+  void compileFile(std::string sourceFile, std::string destFile);
   void printOnFile(std::string filePath);
   virtual ~Pilot();
 private:
   Pilot();
   Pilot(Pilot& other) = delete;
   void operator=(const Pilot& other) = delete;
-  
   static Pilot* m_instance;
   std::unordered_map<std::string, MState*> m_mStates;
   PilotPrinter* m_printer;
