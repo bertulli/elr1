@@ -1,5 +1,5 @@
-#ifndef PILOT_H
-#define PILOT_H
+#ifndef PILOTPRINTER_H
+#define PILOTPRINTER_H
 
 /*************************************************************************/
 /* Copyright Alessandro Bertulli 2022                                    */
@@ -19,29 +19,15 @@
 /* along with ExpLaineR1. If not, see <https://www.gnu.org/licenses/>.	 */
 /*************************************************************************/
 
-#include "MState.hpp"
-#include "PilotPrinter.hpp"
+#include <string>
 
-class Pilot
+class PilotPrinter
 {
 public:
-  static Pilot* getInstance();
-  //true if pilot modified
-  bool addMState(MState *mState);
-  std::unordered_map<std::string, MState*> getMStates();
-  void print();
-  void setPrinter(PilotPrinter* printer);
-  void printOnFile(std::string filePath);
-  virtual ~Pilot();
-private:
-  Pilot();
-  Pilot(Pilot& other) = delete;
-  void operator=(const Pilot& other) = delete;
-  
-  static Pilot* m_instance;
-  std::unordered_map<std::string, MState*> m_mStates;
-  PilotPrinter* m_printer;
+  PilotPrinter() {};
+  virtual ~PilotPrinter(){};
+  virtual void printOnFile(std::string filePath)=0;
 };
 
 
-#endif /* PILOT_H */
+#endif /* PILOTPRINTER_H */

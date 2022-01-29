@@ -30,6 +30,20 @@ Pilot* Pilot::getInstance(){
   return Pilot::m_instance;
 }
 
+std::unordered_map<std::string, MState *> Pilot::getMStates() {
+  return m_mStates;
+}
+
+void Pilot::setPrinter(PilotPrinter* printer){
+  m_printer = printer;
+  return;
+}
+
+void Pilot::printOnFile(std::string filePath){
+  m_printer->printOnFile(filePath);
+  return;
+}
+
 Pilot::~Pilot() {}
 
 Pilot::Pilot() {

@@ -25,6 +25,7 @@
 #include "pilot/Item.hpp"
 #include "pilot/MState.hpp"
 #include "pilot/Pilot.hpp"
+#include "pilot/PilotDotPrinter.hpp"
 
 #include <iostream>
 #include <parser.hpp>
@@ -147,6 +148,8 @@ int main(int argc, char *argv[])
     //std::cout << I0<<I3;
     Pilot* pilot{Pilot::getInstance()};
     pilot->print();
+    pilot->setPrinter(PilotDotPrinter::getInstance());
+    pilot->printOnFile("pilot.dot");
     
   }
   

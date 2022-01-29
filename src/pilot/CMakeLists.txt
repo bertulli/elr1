@@ -27,6 +27,9 @@ add_library(pilotlib #name
   MState.hpp
   Pilot.hpp
   Pilot.cpp
+  PilotPrinter.hpp
+  PilotDotPrinter.hpp
+  PilotDotPrinter.cpp
    )
 
 # target_include_directories(pilotlib PUBLIC
