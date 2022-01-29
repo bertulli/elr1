@@ -1,10 +1,7 @@
-S : EsS|E
+E : T*
 ;
 
+T : a | oEc ;
 
-E ::= BF|Fe
-;
-
-F ::= bFe|&;
-
-B:bB|b
+//a|(b&a)
+//a(b|c)*

@@ -21,7 +21,7 @@
 int reCurrentPos = 0;
 %}
 
-PRODSIGN                    ":"|"::="|"=>"
+PRODSIGN                    ":"|"::="|"=>"|"->"
 			
 %option noyywrap
 %option header-file="lexer.hpp"
