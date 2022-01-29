@@ -36,11 +36,12 @@ public:
   std::string getStateName() const;
   std::set<char> getLookaheads() const;
   Machine* getMachine() const;
-
+  std::set<std::string> htmlLookaheads() const;
   bool operator<(const Item& other) const;
   friend bool operator==(const Item& first, const Item& second);
   friend std::ostream& operator<<(std::ostream& stream, const Item& item);
   friend std::ostream& operator<<(std::ostream& stream, const std::set<Item>& items);
+  friend std::ostream& operator<<(std::ostream& stream, const std::set<std::string>& htmlLookaheads);
 private:
   std::string m_stateName;
   Machine* m_machine;

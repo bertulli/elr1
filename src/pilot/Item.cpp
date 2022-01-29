@@ -49,6 +49,26 @@ std::string Item::getStateName() const { return m_stateName; }
 
 std::set<char> Item::getLookaheads() const { return m_lookaheadSet; }
 
+std::set<std::string> Item::htmlLookaheads() const {
+  std::set<std::string> res;
+  for(auto c : m_lookaheadSet){
+    if(c == '$'){
+      res.emplace("&#x22A3;");
+    } else{
+      res.emplace(std::string(1,c));
+    }
+  }
+  return res;
+}
+
+std::ostream &operator<<(std::ostream &stream,
+                         const std::set<std::string> &htmlLookaheads) {
+  for(auto lookahead : htmlLookaheads){
+    stream << lookahead <<' ';
+  }
+  return stream;
+}
+
 Machine* Item::getMachine() const {return m_machine;}
 
 bool Item::operator<(const Item &other) const {

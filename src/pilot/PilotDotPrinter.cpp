@@ -47,7 +47,16 @@ void PilotDotPrinter::printOnFile(std::string filePath){
 	 << "<TABLE border=\"0\">\n";
     for(auto baseItem : mState.second->getBase()){
       file << "<TR> <TD>" << baseItem.getStateName() << "</TD>\n"
-	   << "<TD>" << baseItem.getLookaheads() << "</TD></TR>\n";
+	   << "<TD>";
+      for(auto c : baseItem.getLookaheads()){
+	if(c=='$'){
+	  file << "&#x22A3;";
+	}else{
+	  file<<c;
+	}
+	file<<' ';
+      }
+      file<< "</TD></TR>\n";
       basePrinted=true;
     }
     if(basePrinted && !mState.second->getClosure().empty()){
@@ -55,7 +64,15 @@ void PilotDotPrinter::printOnFile(std::string filePath){
     }
     for(auto closureItem : mState.second->getClosure()){
       file << "<TR> <TD>" << closureItem.getStateName() << "</TD>\n"
-	   << "<TD>" << closureItem.getLookaheads() << "</TD></TR>\n";
+	   << "<TD>";
+      for(auto c :closureItem.getLookaheads()){
+	if(c=='$'){
+	  file<<"&#x22A3;";
+	} else {
+	  file << c;
+	} file << ' ';
+      }
+      file << "</TD></TR>\n";
     }
     file << "</TABLE> >];\n";
   }
