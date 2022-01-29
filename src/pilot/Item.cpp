@@ -49,9 +49,16 @@ std::string Item::getStateName() const { return m_stateName; }
 
 std::set<char> Item::getLookaheads() const { return m_lookaheadSet; }
 
+Machine* Item::getMachine() const {return m_machine;}
+
 bool Item::operator<(const Item &other) const {
   return (m_stateName < other.m_stateName) ||
     (m_lookaheadSet < other.m_lookaheadSet);
+}
+
+bool operator==(const Item &first, const Item &second) {
+  return first.m_stateName == second.m_stateName &&
+    first.m_lookaheadSet == second.m_lookaheadSet;
 }
 
 std::ostream &operator<<(std::ostream &stream,
@@ -91,7 +98,7 @@ std::set<Item> Item::closure() {
       
       std::set<char> iniOfR = m_machine->getState(currTransition.second)->iniPilotSet();
       if(debugFlag){
-	std::cout << "iniOfR for item " << *this << " and state " << ": " << iniOfR << "\n";
+	//std::cout << "iniOfR for item " << *this << " and state " << ": " << iniOfR << "\n";
       }
        if(iniOfR.count('&') == 1) { //having an epsilon means state R is nulable:inherit lookahead
 	iniOfR.erase('&');

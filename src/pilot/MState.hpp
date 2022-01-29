@@ -25,16 +25,31 @@
 class MState
 {
 public:
-  MState(std::set<Item> set, bool isClosure = false);
+  MState(std::string name, std::set<Item> set, bool isClosure = false);
+  MState(std::string name, std::set<Item> base, std::set<Item> closure);
   virtual ~MState();
   void buildClosure();
   bool addClosure(std::set<Item> newClosure);
   bool addBaseItem(Item newItem);
   bool addBaseItem(std::set<Item> newItems);
+  void addTransition(char label, MState* destState);
+  MState delta(char label);
+  void mark();
+  bool isMarked();
+  bool isEmpty();
+  std::string getName();
+  std::set<Item> getBase();
+  std::set<Item> getClosure();
+  std::unordered_map<char, MState*> getTransitions();
   friend std::ostream& operator<<(std::ostream& stream, const MState& mState);
+  friend bool operator==(const MState& first, const MState& second);
 private:
+  MState();
+  std::string m_name;
+  bool m_marked;
   std::set<Item> m_base;
   std::set<Item> m_closure;
+  std::unordered_map<char, MState*> m_transitions;
 };
 
 

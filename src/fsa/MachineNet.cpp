@@ -22,6 +22,7 @@
 
 MachineNet::MachineNet(){
   //  m_machines = new std::unordered_map<std::string, Machine>();
+		    
 }
 
 MachineNet* MachineNet::getInstance(){
@@ -29,6 +30,18 @@ MachineNet* MachineNet::getInstance(){
 
   return &m_net;
 }
+
+void MachineNet::syncAlphabets(){
+  for(auto m : m_machines){
+    m_alphabet.merge(*(m.second->getAlphabet()));
+  }
+}
+
+std::set<char> MachineNet::getAlphabet(){return m_alphabet;}
+
+void MachineNet::setAxiom(char axiom) { m_axiom = axiom; }
+
+char MachineNet::getAxiom() { return m_axiom; }
 
 Machine* MachineNet::operator[](std::string machineName) {
   return m_machines[machineName];

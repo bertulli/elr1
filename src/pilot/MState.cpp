@@ -18,7 +18,8 @@
 
 #include "MState.hpp"
 
-MState::MState(std::set<Item> set, bool isClosure) {
+MState::MState(std::string name, std::set<Item> set, bool isClosure)
+  : m_name{name}, m_marked{false} {
   if(isClosure){
     m_closure=set;
   } else{
@@ -26,7 +27,58 @@ MState::MState(std::set<Item> set, bool isClosure) {
   }
 }
 
+MState::MState(std::string name, std::set<Item> base, std::set<Item> closure)
+  : m_name{name}, m_base{base}, m_closure{closure}, m_marked{false} {}
+
 MState::~MState() {}
+
+std::string MState::getName() { return m_name; }
+
+std::set<Item> MState::getBase() { return m_base; }
+
+std::set<Item> MState::getClosure(){return m_closure;}
+
+std::unordered_map<char, MState *> MState::getTransitions() {
+  return m_transitions;
+}
+
+void MState::addTransition(char label, MState* destState) {
+  m_transitions.emplace(label, destState);
+  return;
+}
+
+void MState::mark() { m_marked = true; }
+
+bool MState::isMarked() { return m_marked; }
+
+bool MState::isEmpty(){return m_base.empty() && m_closure.empty();}
+
+MState::MState()
+  : m_marked{false} {}
+
+MState MState::delta(char label) {
+  MState res;
+
+  for(auto item : m_base){
+    MachineState* itemState{item.getMachine()->getState(item.getStateName())};
+    if(itemState->getTransitions()->count(label) == 1){
+      std::string stateName{itemState->getTransitions()->at(label)};
+      MachineState* destStateAddr{item.getMachine()->getState(stateName)};
+      res.addBaseItem(Item{stateName, item.getMachine(), destStateAddr, item.getLookaheads()});
+    }
+  }
+
+  for(auto item : m_closure){
+    MachineState* itemState{item.getMachine()->getState(item.getStateName())};
+    if(itemState->getTransitions()->count(label) == 1){
+      std::string stateName{itemState->getTransitions()->at(label)};
+      MachineState* destStateAddr{item.getMachine()->getState(stateName)};
+      res.addBaseItem(Item{stateName, item.getMachine(), destStateAddr, item.getLookaheads()});
+    }
+  }
+  
+  return res;
+}
 
 bool MState::addBaseItem(Item newItem) {
   bool itemAlreadyPresent{false};
@@ -68,6 +120,11 @@ bool MState::addBaseItem(std::set<Item> newItems) {
     mStateModified |= addBaseItem(newItem);
   }
   return mStateModified;
+}
+
+bool operator==(const MState &first, const MState &second) {
+  return first.m_base == second.m_base &&
+    first.m_closure == second.m_closure;
 }
 
 bool MState::addClosure(std::set<Item> newClosure) {
@@ -116,7 +173,7 @@ void MState::buildClosure() {
 }
 
 std::ostream &operator<<(std::ostream &stream, const MState &mState) {
-  stream << "Temporary print for mstate\n"
+  stream << "Temporary print for mstate" << mState.m_name<<"\n"
 	 << "Base:\n";
   for(auto baseItem : mState.m_base){
     stream << baseItem << '\n';

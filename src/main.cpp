@@ -24,6 +24,7 @@
 #include "common/flags.h"
 #include "pilot/Item.hpp"
 #include "pilot/MState.hpp"
+#include "pilot/Pilot.hpp"
 
 #include <iostream>
 #include <parser.hpp>
@@ -136,14 +137,16 @@ int main(int argc, char *argv[])
 
   
   if(debugFlag){
-    
-    m = net->getMachine("S");
-    Item initial{"0S", m, m->getState("0S"), {'$'}};
-    MState I0{{initial}};
-    MState I3{{Item{"1S", m, m->getState("1S"), {'b'}}}};
-    I3.buildClosure();
-    I0.buildClosure();
-    std::cout << I0<<I3;
+    std::cout<<"axiom:"<<net->getAxiom()<<'\n';
+    //    m = net->getMachine("S");
+    //    Item initial{"0S", m, m->getState("0S"), {'$'}};
+    //    MState I0{"I0",{initial}};
+    //    MState I3{"I3",{Item{"1S", m, m->getState("1S"), {'b'}}}};
+    //    I3.buildClosure();
+    //    I0.buildClosure();
+    //std::cout << I0<<I3;
+    Pilot* pilot{Pilot::getInstance()};
+    pilot->print();
     
   }
   

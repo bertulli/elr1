@@ -1,5 +1,5 @@
-#ifndef MACHINENET_H
-#define MACHINENET_H
+#ifndef PILOT_H
+#define PILOT_H
 
 /*************************************************************************/
 /* Copyright Alessandro Bertulli 2022                                    */
@@ -19,34 +19,24 @@
 /* along with ExpLaineR1. If not, see <https://www.gnu.org/licenses/>.	 */
 /*************************************************************************/
 
-#include "Machine.hpp"
-#include "../ast/ASTGenericNode.hpp"
-#include <unordered_map>
-#include <string>
+#include "MState.hpp"
 
-//singleton
-class MachineNet
+class Pilot
 {
 public:
-  static MachineNet* getInstance();
-  virtual ~MachineNet();
-  int addMachine(std::string machineName);
-  Machine* getMachine(std::string machineName);
-  Machine* operator[](std::string machineName);
-  std::unordered_map<std::string, Machine*> getMachines();
-  void setAxiom(char axiom);
-  char getAxiom();
-  void syncAlphabets();
-  std::set<char> getAlphabet();
+  static Pilot* getInstance();
+  //true if pilot modified
+  bool addMState(MState *mState);
+  void print();
+  virtual ~Pilot();
 private:
-  MachineNet(MachineNet& other) = delete;
-  void operator=(const MachineNet& other) = delete;
-  std::set<char> m_alphabet;
-  MachineNet();
-  std::unordered_map<std::string, Machine*> m_machines;
-  char m_axiom;
-  //static MachineNet* m_net;
+  Pilot();
+  Pilot(Pilot& other) = delete;
+  void operator=(const Pilot& other) = delete;
+  
+  static Pilot* m_instance;
+  std::unordered_map<std::string, MState*> m_mStates;
 };
 
 
-#endif /* MACHINENET_H */
+#endif /* PILOT_H */

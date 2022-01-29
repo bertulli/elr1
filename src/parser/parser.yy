@@ -22,6 +22,7 @@
 #include <common/BSNonTerminal.hpp>
 #include <common/flags.h>
 #include <fsa/MachineNet.hpp>
+#include <fsa/Machine.hpp>
 #include <string.h>
 #include <ast/AST.hpp>
 
@@ -52,17 +53,20 @@ char* pcross(char* subexp);
 	int rePos;
 	};
 }
+
 %union{
     struct BSCharacter bsChar;
     struct expression expr;
+    char axiom;
 }
 			
 
 %type	<expr>		expr
+%type	<axiom>		rule
 %token PRODSIGN
 %token SEMICOLON
 %token	<bsChar>	EPSILON			
-%start grammar			
+%start grammarAxiom			
 
 %precedence LPAR RPAR
 %left			UNION
@@ -75,17 +79,23 @@ char* pcross(char* subexp);
 						
 %%
 
+grammarAxiom : rule {MachineNet* net{MachineNet::getInstance()};
+		     net->setAxiom($1);}
+		grammar {MachineNet::getInstance()->syncAlphabets();};
+		
 grammar : grammar SEMICOLON rule {}
 	|	rule
 ;
 
 rule : NONTERMINAL {std::string machineName{std::string(1, $1.grammarChar)};
                     MachineNet::getInstance()->addMachine(machineName);
+                    $<axiom>$ = $1.grammarChar;
 		    ruleAlphabet = new std::set<char>();}
 
 PRODSIGN expr {
-               if(debugFlag)
+               if(debugFlag){
                 	printf("Rule for %c: %s\n", $1, $4.pexpr);
+	       }
                ASTLeafTerminal* terminalNode = new ASTLeafTerminal('$', 0);
                ASTGenericNode* terminatedRoot = new ASTConcatOperator($4.subtree, terminalNode);
 	       ruleAlphabet->emplace('$');
